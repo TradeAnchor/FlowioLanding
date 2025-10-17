@@ -1,1 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowio by TradeAnchor - Google-Native Quote System for Electricians</title>
+    <meta name="description" content="Send quotes, get deposits, book jobs—all from Google Sheets. $3,000 one-time. No subscriptions.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Plausible Analytics -->
+    <!-- TODO: Replace YOURDOMAIN.com with your actual domain before deploying -->
+    <script defer data-domain="YOURDOMAIN.com" src="https://plausible.io/js/script.js"></script>
+    
+    <!-- Open Graph / Social Media Cards -->
+    <!-- TODO: Add proper og:image URL and update content before deploying -->
+    <meta property="og:title" content="Flowio by TradeAnchor - Turn quotes into booked jobs in 3 taps">
+    <meta property="og:description" content="Google-native quote system for electricians. $3,000 one-time. No subscriptions.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://YOURDOMAIN.com/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Favicon -->
+    <!-- TODO: Add favicon files before deploying -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <!-- Calendly -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --accent: #00D9B8;
+            --dark: #0A0E27;
+            --gray-900: #1A1F36;
+            --gray-800: #2D3748;
+            --gray-700: #4A5568;
+            --gray-600: #718096;
+            --gray-400: #CBD5E0;
+            --gray-200: #E2E8F0;
+            --gray-100: #F7FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: #FFFFFF;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Sticky Header */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 0;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sticky-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .sticky-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 120px 24px 100px;
+            background: linear-gradient(180deg, #F8FBFF 0%, #FFFFFF 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 64px);
+            line-height: 1.1;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero .subhead {
+            font-size: clamp(18px, 2.5vw, 22px);
+            color: var(--gray-700);
+            margin-bottom: 40px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(0, 102, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--gray-200);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--gray-100);
+        }
+        
+        .trust-bar {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+        
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        /* Demo Section */
+        .demo-section {
+            padding: 100px 24px;
+            background: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+        
+        .section-header h2 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-header p {
+            font-size: 18px;
+            color: var(--gray-600);
+        }
+        
+        .demo-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .demo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        .form-group input {
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        
+        .demo-form button {
+            margin-top: 8px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 18px;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-form button:hover {
+            background: #00C4A7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 217, 184, 0.3);
+        }
+        
+        .demo-success {
+            display: none;
+            background: linear-gradient(135deg, #E6FFF9 0%, #CCFFF0 100%);
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid var(--accent);
+        }
+        
+        .demo-success.visible {
+            display: block;
+        }
+        
+        .success-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .success-item::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: var(--dark);
+            border-radius: 50%;
+            font-weight: 700;
+        }
+        
+        .demo-note {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid rgba(0, 217, 184, 0.3);
+            text-align: center;
+            color: var(--gray-700);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* How It Works */
+        .how-section {
+            padding: 100px 24px;
+            background: var(--gray-100);
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+        
+        .step-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+        
+        .step-card p {
+            color: var(--gray-600);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        /* Pricing */
+        .pricing-section {
+            padding: 100px 24px;
+            background: white;
+        }
+        
+        .pricing-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #F0F7FF 0%, #E6F2FF 100%);
+            border-radius: 32px;
+            padding: 56px 48px;
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .price-amount {
+            font-size: 72px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .price-label {
+            font-size: 18px;
+            color: var(--gray-700);
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+        
+        .features-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.15);
+            font-size: 16px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .features-list li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .price-note {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-bottom: 32px;
+        }
+        
+        .guarantee-box {
+            max-width: 700px;
+            margin: 48px auto 0;
+            background: linear-gradient(135deg, #E6FFF9 0%, #CCFFF0 100%);
+            padding: 32px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--accent);
+        }
+        
+        .guarantee-box p {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        
+        /* FAQ */
+        .faq-section {
+            padding: 100px 24px;
+            background: var(--gray-100);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        
+        .faq-item summary {
+            padding: 24px 28px;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-900);
+            transition: all 0.2s ease;
+        }
+        
+        .faq-item summary:hover {
+            background: var(--gray-100);
+        }
+        
+        .faq-item summary::after {
+            content: '+';
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 300;
+            transition: transform 0.2s ease;
+        }
+        
+        .faq-item[open] summary::after {
+            transform: rotate(45deg);
+        }
+        
+        .faq-item p {
+            padding: 0 28px 24px;
+            color: var(--gray-700);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            padding: 120px 24px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--gray-900) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 217, 184, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .final-cta h2 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 800;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .final-cta .btn-primary {
+            background: white;
+            color: var(--primary);
+            font-size: 18px;
+            padding: 20px 48px;
+        }
+        
+        .final-cta .btn-primary:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 24px;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
+        
+        .footer-brand {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-copyright {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Exit Popup */
+        .exit-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 24px;
+        }
+        
+        .exit-popup.visible {
+            display: flex;
+        }
+        
+        .popup-content {
+            background: white;
+            padding: 48px;
+            border-radius: 32px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gray-100);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+        
+        .popup-close:hover {
+            background: var(--gray-200);
+        }
+        
+        .popup-content h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .popup-content p {
+            color: var(--gray-600);
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+        
+        /* Honeypot */
+        .hp {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 24px 60px;
+            }
+            
+            .demo-card {
+                padding: 32px 24px;
+            }
+            
+            .pricing-card {
+                padding: 40px 28px;
+            }
+            
+            .price-amount {
+                font-size: 56px;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
 
+    <!-- Sticky Header -->
+    <div class="sticky-header">
+        <div class="container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" stroke="url(#gradient)" stroke-width="6"/>
+                    <circle cx="30" cy="35" r="8" fill="url(#gradient)"/>
+                    <circle cx="70" cy="30" r="8" fill="url(#gradient)"/>
+                    <circle cx="50" cy="65" r="8" fill="url(#gradient)"/>
+                    <line x1="35" y1="38" x2="47" y2="60" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="53" y1="60" x2="65" y2="35" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#0066FF"/>
+                            <stop offset="100%" stop-color="#00D9B8"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Flowio</span>
+            </div>
+            <button class="btn btn-primary" onclick="openCalendly()">Book setup call</button>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Turn quotes into booked jobs in 3 taps. No new software.</h1>
+            <p class="subhead">Flowio runs inside Google. One sheet, zero chaos. Pay once. Own it forever.</p>
+            
+            <div class="hero-cta">
+                <button class="btn btn-primary" onclick="openCalendly()">
+                    Book my 15-min setup
+                </button>
+                <button class="btn btn-secondary" onclick="openVideoModal()">
+                    Watch 3-min demo
+                </button>
+            </div>
+            
+            <div class="trust-bar">
+                <div class="trust-item">
+                    <span>🔒</span>
+                    <span>100% Google-native</span>
+                </div>
+                <div class="trust-item">
+                    <span>📱</span>
+                    <span>Works on mobile</span>
+                </div>
+                <div class="trust-item">
+                    <span>⚡</span>
+                    <span>No subscriptions</span>
+                </div>
+                <div class="trust-item">
+                    <span>✓</span>
+                    <span>Own it forever</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Send the live demo to your phone</h2>
+                <p>See exactly what your customers see—in 30 seconds</p>
+            </div>
+            
+            <div class="demo-card">
+                <form class="demo-form" id="demo-form">
+                    <div class="form-group">
+                        <label>Your name</label>
+                        <input type="text" name="name" placeholder="John Smith" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mobile number</label>
+                        <input type="tel" name="phone" placeholder="0400 000 000" required inputmode="tel" autocomplete="tel">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Business name</label>
+                        <input type="text" name="business" placeholder="Smith Electrical" required>
+                    </div>
+                    
+                    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off">
+                    
+                    <button type="submit">Send me the demo →</button>
+                </form>
+                
+                <div class="demo-success" id="demo-success">
+                    <div class="success-item">SMS sent to your phone</div>
+                    <div class="success-item">Email with PDF quote + Add to Calendar</div>
+                    <div class="success-item">Test checkout ready (optional)</div>
+                    
+                    <p class="demo-note">
+                        <strong>Check your phone.</strong> That's what your customers see.<br>
+                        No app needed. No training. Just works.
+                    </p>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 24px;" onclick="openCalendly()">
+                        Book my 15-min setup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Three taps. Job booked.</h2>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Build quote in your Sheet</h3>
+                    <p>Add customer, line items, price. Hit "Generate PDF". Done.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Customer taps "Accept"</h3>
+                    <p>Gets instant SMS + email with 'Add to Calendar' link. They pick a time.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Deposit paid (optional)</h3>
+                    <p>Stripe checkout. SMS reminders scheduled. Everything logged automatically.</p>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 48px; color: var(--gray-600); font-size: 15px;">
+                Everything lives in your Google Drive. No new software to learn.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>One price. No subscriptions.</h2>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-badge">First 5: $2,500</div>
+                
+                <div class="price-amount">$3,000</div>
+                <div class="price-label">one-time install</div>
+                
+                <ul class="features-list">
+                    <li>Branded quotes + accept flow</li>
+                    <li>SMS + Calendar + Stripe wiring</li>
+                    <li>Error alerts + owner dashboard</li>
+                    <li>12 months updates + break-fix support</li>
+                </ul>
+                
+                <div class="price-note">
+                    After 12 months: Optional $149/mo care plan or $180/hr pay-per-incident
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;" onclick="openCalendly()">
+                    Book my setup call
+                </button>
+            </div>
+            
+            <div class="guarantee-box">
+                <p>💯 10 accepted quotes in 7 days or I keep working free until you do</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Questions?</h2>
+            </div>
+            
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary>Will this replace my current system?</summary>
+                    <p>No. Flowio works inside your existing Google Sheets/Calendar/Drive. No migration needed. Keep everything you're already using.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary>Does it work on mobile?</summary>
+                    <p>Yes. Customers accept on their phones (mobile-optimized page). You can create quotes from job sites using our big-button Quick Quote form.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary>What if something breaks?</summary>
+                    <p>We auto-email you with the error + context. 12 months of break-fix support included (covers Google/Stripe/Xero changes, template fixes, auth issues).</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary>Do customers pay card fees?</summary>
+                    <p>Optional. You can pass through Stripe card fees, or absorb them. Your choice.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary>Does it work with Xero?</summary>
+                    <p>Yes — Xero draft invoice is available on request (optional add-on).</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Be live this week.</h2>
+            <button class="btn btn-primary" onclick="openCalendly()">Book my 15-min setup</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-brand">TradeAnchor · ABN [YOUR REAL ABN]</div>
+            <div class="footer-links">
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/refund.html">Refund Policy</a>
+                <a href="mailto:support@tradeanchor.com.au">Support</a>
+            </div>
+            <div class="footer-copyright">© 2025 TradeAnchor. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Exit Popup -->
+    <div class="exit-popup" id="exit-popup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeExitPopup()">×</button>
+            <h3>⚡ Wait! Try it first.</h3>
+            <p>Enter your mobile and we'll send you a live demo in 30 seconds.</p>
+            
+            <form class="demo-form" id="exit-form">
+                <div class="form-group">
+                    <input type="tel" name="phone" placeholder="Your mobile" required inputmode="tel" autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Your email" required>
+                </div>
+                <button type="submit">Send demo →</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // UTM Capture
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmData = {
+            source: urlParams.get('utm_source') || 'direct',
+            medium: urlParams.get('utm_medium') || 'none',
+            campaign: urlParams.get('utm_campaign') || 'none'
+        };
+        sessionStorage.setItem('utmData', JSON.stringify(utmData));
+        
+        // Sticky Header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.sticky-header');
+            if (window.scrollY > 400) {
+                header.classList.add('visible');
+            } else {
+                header.classList.remove('visible');
+            }
+        });
+        
+        // Calendly
+        function openCalendly() {
+            Calendly.initPopupWidget({
+                url: 'https://calendly.com/tradeanchor/15min?' + new URLSearchParams(utmData).toString()
+            });
+            if (window.plausible) plausible('Calendly Open', {props: utmData});
+            return false;
+        }
+        
+        // Video Modal
+        // TODO: Replace alert with proper Loom embed modal or hide button until ready
+        function openVideoModal() {
+            // Option 1: Create a modal with Loom iframe
+            // Option 2: Open Loom in new window: window.open('YOUR_LOOM_URL', '_blank')
+            // Option 3: Hide the "Watch demo" button until video is ready
+            alert('Video modal - Replace with your Loom embed or remove this button');
+            if (window.plausible) plausible('Video View', {props: utmData});
+        }
+        
+        // Demo Form
+        document.getElementById('demo-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Honeypot check (catches bots)
+            if (e.target.website.value !== '') return;
+            
+            const formData = {
+                name: e.target.name.value,
+                phone: e.target.phone.value,
+                email: e.target.email.value,
+                business: e.target.business.value,
+                timestamp: Date.now(), // Used for spam detection in Make
+                ...JSON.parse(sessionStorage.getItem('utmData'))
+            };
+            
+            // TODO: In Make webhook, add these spam controls:
+            // 1. Reject if timestamp shows submit happened < 2 seconds after page load
+            // 2. Rate limit per IP address (e.g. max 3 submits per hour)
+            // 3. Check honeypot field is empty
+            
+            try {
+                // TODO: Replace YOUR_MAKE_WEBHOOK_URL with your actual Make webhook
+                // Security: API key authentication removed (handle rate-limiting in Make via honeypot + IP checks)
+                await fetch('YOUR_MAKE_WEBHOOK_URL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                document.getElementById('demo-form').style.display = 'none';
+                document.getElementById('demo-success').classList.add('visible');
+                
+                if (window.plausible) plausible('Demo Submit', {props: utmData});
+            } catch (error) {
+                alert('Error. Please email support@tradeanchor.com.au');
+            }
+        });
+        
+        // Exit Form
+        document.getElementById('exit-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                phone: e.target.phone.value,
+                email: e.target.email.value,
+                source: 'exit-intent',
+                timestamp: Date.now(),
+                ...JSON.parse(sessionStorage.getItem('utmData'))
+            };
+            
+            try {
+                await fetch('YOUR_MAKE_WEBHOOK_URL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                closeExitPopup();
+                alert('✅ Demo sent! Check your phone.');
+                if (window.plausible) plausible('Exit Demo', {props: utmData});
+            } catch (error) {
+                alert('Error. Please try again.');
+            }
+        });
+        
+        // Exit Intent
+        let exitShown = false;
+        document.addEventListener('mouseout', function(e) {
+            if (e.clientY < 10 && !exitShown) {
+                exitShown = true;
+                document.getElementById('exit-popup').classList.add('visible');
+                if (window.plausible) plausible('Exit Intent', {props: utmData});
+            }
+        });
+        
+        function closeExitPopup() {
+            document.getElementById('exit-popup').classList.remove('visible');
+        }
+        
+        document.getElementById('exit-popup').addEventListener('click', function(e) {
+            if (e.target === this) closeExitPopup();
+        });
+    </script>
+</body>
+</html>
