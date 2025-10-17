@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowio by TradeAnchor - Google-Native Quote System for Electricians</title>
+    <title>TradeAnchor - Google-Native Quote System for Electricians</title>
     <meta name="description" content="Send quotes, get deposits, book jobs—all from Google Sheets. $3,000 one-time. No subscriptions.">
     
     <!-- Google Fonts -->
@@ -12,20 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Plausible Analytics -->
-    <!-- TODO: Replace YOURDOMAIN.com with your actual domain before deploying -->
     <script defer data-domain="tradeanchor.com.au" src="https://plausible.io/js/script.js"></script>
     
     <!-- Open Graph / Social Media Cards -->
-    <!-- TODO: Add proper og:image URL and update content before deploying -->
-    <meta property="og:title" content="Flowio by TradeAnchor - Turn quotes into booked jobs in 3 taps">
+    <meta property="og:title" content="TradeAnchor - Turn quotes into booked jobs in 3 taps">
     <meta property="og:description" content="Google-native quote system for electricians. $3,000 one-time. No subscriptions.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://tradeanchor.com.au/og-image.jpg">
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Favicon -->
-    <!-- TODO: Add favicon files before deploying -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- TODO: Upload square logo to /images/logo-square.png -->
+    <link rel="icon" type="image/png" href="/images/logo-square.png">
     
     <!-- Calendly -->
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
@@ -98,19 +96,11 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 800;
-            font-size: 24px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            flex-shrink: 0;
+            height: 32px;
+            width: auto;
         }
         
         /* Hero */
@@ -152,16 +142,50 @@
         .hero .subhead {
             font-size: clamp(18px, 2.5vw, 22px);
             color: var(--gray-700);
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             font-weight: 500;
             line-height: 1.5;
         }
         
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 32px;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            background: var(--gray-100);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            color: var(--gray-600);
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
         .hero-cta {
             display: flex;
-            gap: 16px;
             justify-content: center;
-            flex-wrap: wrap;
             margin-bottom: 48px;
         }
         
@@ -714,6 +738,14 @@
                 padding: 80px 24px 60px;
             }
             
+            .video-container {
+                margin-bottom: 24px;
+            }
+            
+            .hero-cta .btn {
+                width: 100%;
+            }
+            
             .demo-card {
                 padding: 32px 24px;
             }
@@ -747,21 +779,8 @@
     <div class="sticky-header">
         <div class="container">
             <div class="logo">
-                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" stroke="url(#gradient)" stroke-width="6"/>
-                    <circle cx="30" cy="35" r="8" fill="url(#gradient)"/>
-                    <circle cx="70" cy="30" r="8" fill="url(#gradient)"/>
-                    <circle cx="50" cy="65" r="8" fill="url(#gradient)"/>
-                    <line x1="35" y1="38" x2="47" y2="60" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="53" y1="60" x2="65" y2="35" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round"/>
-                    <defs>
-                        <linearGradient id="gradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#0066FF"/>
-                            <stop offset="100%" stop-color="#00D9B8"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span>Flowio</span>
+                <!-- TODO: Upload logo to /images/logo-horizontal.png -->
+                <img src="/images/logo-horizontal.png" alt="TradeAnchor" class="logo-icon">
             </div>
             <button class="btn btn-primary" onclick="openCalendly()">Book setup call</button>
         </div>
@@ -771,14 +790,28 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Turn quotes into booked jobs in 3 taps. No new software.</h1>
-            <p class="subhead">Flowio runs inside Google. One sheet, zero chaos. Pay once. Own it forever.</p>
+            <p class="subhead">TradeAnchor runs inside Google. One sheet, zero chaos. Pay once. Own it forever.</p>
+            
+            <!-- Video Container -->
+            <div class="video-container">
+                <!-- TODO: Replace src with your Loom share URL (embed format) -->
+                <!-- Example: https://www.loom.com/embed/YOUR_VIDEO_ID -->
+                <iframe 
+                    src="" 
+                    frameborder="0" 
+                    webkitallowfullscreen 
+                    mozallowfullscreen 
+                    allowfullscreen
+                    style="display: none;">
+                </iframe>
+                <div class="video-placeholder">
+                    📹 Video demo coming soon
+                </div>
+            </div>
             
             <div class="hero-cta">
-                <button class="btn btn-primary" onclick="openCalendly()">
-                    Book my 15-min setup
-                </button>
-                <button class="btn btn-secondary" onclick="openVideoModal()">
-                    Watch 3-min demo
+                <button class="btn btn-primary" onclick="openCalendly()" style="font-size: 18px; padding: 18px 48px;">
+                    Book my 15-min setup →
                 </button>
             </div>
             
@@ -934,7 +967,7 @@
             <div class="faq-container">
                 <details class="faq-item">
                     <summary>Will this replace my current system?</summary>
-                    <p>No. Flowio works inside your existing Google Sheets/Calendar/Drive. No migration needed. Keep everything you're already using.</p>
+                    <p>No. TradeAnchor works inside your existing Google Sheets/Calendar/Drive. No migration needed. Keep everything you're already using.</p>
                 </details>
                 
                 <details class="faq-item">
@@ -971,7 +1004,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-brand">TradeAnchor · ABN 45 529 331 663 </div>
+            <div class="footer-brand">TradeAnchor · ABN [YOUR REAL ABN]</div>
             <div class="footer-links">
                 <a href="/privacy.html">Privacy</a>
                 <a href="/terms.html">Terms</a>
@@ -1028,16 +1061,6 @@
             });
             if (window.plausible) plausible('Calendly Open', {props: utmData});
             return false;
-        }
-        
-        // Video Modal
-        // TODO: Replace alert with proper Loom embed modal or hide button until ready
-        function openVideoModal() {
-            // Option 1: Create a modal with Loom iframe
-            // Option 2: Open Loom in new window: window.open('YOUR_LOOM_URL', '_blank')
-            // Option 3: Hide the "Watch demo" button until video is ready
-            alert('Video modal - Replace with your Loom embed or remove this button');
-            if (window.plausible) plausible('Video View', {props: utmData});
         }
         
         // Demo Form
