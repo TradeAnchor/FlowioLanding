@@ -893,55 +893,19 @@
       </div>
     </section>
 
-    <!-- Demo Section -->
+    <!-- Calendly Booking Section -->
     <section class="demo-section">
         <div class="container">
             <div class="section-header">
-                <h2>Send the live demo to your phone</h2>
-                <p>See exactly what your customers see—in 30 seconds</p>
+                <h2>Book your 15-minute setup call</h2>
+                <p>Pick a time that works for you—we'll have you live in 7 days</p>
             </div>
             
-            <div class="demo-card">
-                <form class="demo-form" id="demo-form">
-                    <div class="form-group">
-                        <label>Your name</label>
-                        <input type="text" name="name" placeholder="John Smith" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Mobile number</label>
-                        <input type="tel" name="phone" placeholder="0400 000 000" required inputmode="tel" autocomplete="tel">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" placeholder="john@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Business name</label>
-                        <input type="text" name="business" placeholder="Smith Electrical" required>
-                    </div>
-                    
-                    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off">
-                    
-                    <button type="submit">Send me the demo →</button>
-                </form>
-                
-                <div class="demo-success" id="demo-success">
-                    <div class="success-item">SMS sent to your phone</div>
-                    <div class="success-item">Email with PDF quote + Add to Calendar</div>
-                    <div class="success-item">Test checkout ready (optional)</div>
-                    
-                    <p class="demo-note">
-                        <strong>Check your phone.</strong> That's what your customers see.<br>
-                        No app needed. No training. Just works.
-                    </p>
-                    
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 24px;" onclick="openCalendly()">
-                        Book my 15-min setup
-                    </button>
-                </div>
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <!-- Calendly inline widget begin -->
+                <div class="calendly-inline-widget" data-url="https://calendly.com/billing-tradeanchor" style="min-width:320px;height:700px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                <!-- Calendly inline widget end -->
             </div>
         </div>
     </section>
