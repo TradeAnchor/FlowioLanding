@@ -189,15 +189,15 @@
         .hero-cta {
             display: flex;
             justify-content: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
         }
         
         .btn {
-            padding: 18px 40px;
-            font-size: 18px;
+            padding: 16px 32px;
+            font-size: 17px;
             font-weight: 600;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
@@ -244,18 +244,21 @@
         
         .trust-bar {
             display: flex;
-            gap: 24px;
+            gap: 20px;
             justify-content: center;
-            flex-wrap: wrap;
-            font-size: 14px;
-            color: var(--gray-600);
+            flex-wrap: nowrap;
+            font-size: 13px;
+            color: var(--text-light);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .trust-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: 500;
+            white-space: nowrap;
         }
         
         /* Demo Section */
@@ -749,45 +752,6 @@
         }
         
         @media (max-width: 768px) {
-            .hero {
-                padding: 0 24px;
-            }
-            
-            .hero h1 {
-                text-align: center;
-            }
-            
-            .hero .subhead {
-                text-align: center;
-            }
-            
-            .video-shell {
-                aspect-ratio: 16/9;
-                width: 100%;
-                min-height: 220px;
-                margin-bottom: 24px;
-                border: 1px solid var(--gray-200);
-                border-radius: 16px;
-                background: #e9eff7;
-                box-shadow: 0 18px 48px rgba(0,0,0,.08);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #475467;
-            }
-            
-            .hero-cta {
-                justify-content: center;
-            }
-            
-            .hero-cta .btn {
-                width: 100%;
-            }
-            
-            .trust-bar {
-                justify-content: center;
-            }
-            
             .demo-card {
                 padding: 32px 24px;
             }
@@ -806,65 +770,117 @@
         }
         
         /* --- Compact above-the-fold hero overrides --- */
-        .hero{ min-height: 100vh; max-height: 100vh; }
-        .hero .subhead{ margin-bottom:28px; }
+        .hero{ min-height: 100vh; max-height: 100vh; padding: 80px 24px; }
+        .hero .subhead{ margin-bottom: 32px; }
 
         @media (min-width:1024px){
-          .hero .hero-content{ max-width:1200px; }
+          .hero { padding: 100px 40px; }
+          .hero .hero-content{ max-width: 1280px; }
           .hero-grid{
-            display:grid; grid-template-columns:1fr 1.15fr; gap:40px; align-items:center;
-            height: 100%;
+            display: grid; 
+            grid-template-columns: 1fr 1.1fr; 
+            gap: 64px; 
+            align-items: center;
+            height: auto;
           }
-          .hero h1{ font-size: clamp(36px,4.6vw,56px); margin-bottom:20px; text-align: left; }
-          .hero .subhead{ font-size:20px; text-align: left; }
-          .hero-cta{ justify-content:flex-start; margin:28px 0 0; gap:12px; }
-          .trust-bar{ justify-content:flex-start; gap:20px; margin-top:24px; }
+          .hero h1{ 
+            font-size: clamp(40px, 4.5vw, 60px); 
+            margin-bottom: 28px; 
+            text-align: left;
+            line-height: 1.15;
+          }
+          .hero .subhead{ 
+            font-size: 20px; 
+            text-align: left;
+            margin-bottom: 36px;
+            line-height: 1.6;
+          }
+          .hero-cta{ 
+            justify-content: flex-start; 
+            margin: 0 0 32px 0;
+          }
+          .hero-cta .btn {
+            padding: 18px 36px;
+            font-size: 17px;
+          }
+          .trust-bar{ 
+            justify-content: flex-start; 
+            gap: 24px;
+            font-size: 14px;
+          }
 
           /* Video box sized to fit without scrolling */
           .video-shell{
-            border:1px solid var(--gray-200); border-radius:16px; background:#e9eff7;
-            box-shadow:0 18px 48px rgba(0,0,0,.08);
-            aspect-ratio:16/10; max-height:70vh; min-height:380px; width:100%;
-            display:flex; align-items:center; justify-content:center; color:#475467;
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            background: #e9eff7;
+            box-shadow: 0 20px 60px rgba(0,0,0,.08);
+            aspect-ratio: 16/10; 
+            max-height: 520px; 
+            min-height: 360px; 
+            width: 100%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--text-light);
           }
         }
 
-        /* Mobile unchanged except smaller gap */
+        /* Mobile layout */
         @media (max-width:1023px){
+          .hero { padding: 60px 20px; }
           .hero-grid { 
             display: flex; 
             flex-direction: column; 
-            gap: 16px;
-          }
-          .video-shell{ 
-            aspect-ratio:16/9; 
-            width:100%; 
-            min-height:180px;
-            order: 3;
+            gap: 20px;
           }
           .hero-grid > div:first-child {
-            display: flex;
-            flex-direction: column;
+            display: contents;
           }
           .hero h1 {
-            font-size: 32px;
-            margin-bottom: 12px;
+            font-size: 30px;
+            margin-bottom: 16px;
             order: 1;
           }
           .hero .subhead {
             font-size: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 0;
             order: 2;
           }
+          .video-shell{ 
+            aspect-ratio: 16/9; 
+            width: 100%; 
+            min-height: 200px;
+            max-height: 240px;
+            order: 3;
+            margin-bottom: 0;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #e9eff7;
+            box-shadow: 0 12px 32px rgba(0,0,0,.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+          }
           .hero-cta {
-            margin: 16px 0 0;
             order: 4;
+            margin: 0;
+          }
+          .hero-cta .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px 24px;
           }
           .trust-bar {
-            margin-top: 16px;
-            font-size: 13px;
-            gap: 16px;
             order: 5;
+            gap: 16px;
+            font-size: 12px;
+            justify-content: flex-start;
+            padding: 0 4px;
+          }
+          .trust-item {
+            gap: 5px;
           }
         }
     </style>
@@ -921,7 +937,7 @@
             
             <div style="max-width: 1000px; margin: 0 auto;">
                 <!-- Calendly inline widget begin -->
-                <div class="calendly-inline-widget" data-url="https://calendly.com/billing-tradeanchor?hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
+                <div class="calendly-inline-widget" data-url="https://calendly.com/billing-tradeanchor" style="min-width:320px;height:700px;"></div>
                 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
                 <!-- Calendly inline widget end -->
             </div>
@@ -985,7 +1001,7 @@
                     After 12 months: Optional $149/mo care plan or $180/hr pay-per-incident
                 </div>
                 
-                <button class="btn btn-primary" style="width: 100%;" onclick="scrollToBooking()">
+                <button class="btn btn-primary" style="width: 100%;" onclick="openCalendly()">
                     Book my setup call
                 </button>
             </div>
@@ -1043,7 +1059,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-brand">TradeAnchor · ABN 45 529 331 663</div>
+            <div class="footer-brand">TradeAnchor · ABN [YOUR REAL ABN]</div>
             <div class="footer-links">
                 <a href="/privacy.html">Privacy</a>
                 <a href="/terms.html">Terms</a>
