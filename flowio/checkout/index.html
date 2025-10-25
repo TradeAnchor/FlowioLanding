@@ -1,17 +1,33 @@
 <!doctype html>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Redirecting to secure checkout…</title>
-<div style="font:16px system-ui;margin:24px">Opening Stripe…</div>
+<style>
+  body{font:16px system-ui,Segoe UI,Roboto,sans-serif;padding:24px}
+</style>
 <script>
-(async () => {
-  const qid = new URL(location).searchParams.get('q'); // e.g. ?q=Q0047
-  if(!qid) { document.body.textContent = 'Missing quote id.'; return; }
-  const url = 'https://script.google.com/macros/s/AKfycbyFQ_9M07jtexxLOhTizhN74x3iBGFk0KdVoWvvyxNV6ULbHlVrqjEyL6UbirqCV9wE/exec?action=pay_json&q=' + encodeURIComponent(qid);
-  try {
-    const r = await fetch(url, {credentials:'omit'});
-    const j = await r.json();
-    if (j && j.url) location.replace(j.url);
-    else document.body.textContent = 'Could not start checkout.';
-  } catch(e){ document.body.textContent = 'Network error.'; }
-})();
+  // 1) Read q from the URL (?q=Qxxxx)
+  const params = new URLSearchParams(location.search);
+  const q = params.get('q');
+  // 2) Your deployed Apps Script web app URL (latest /exec, access: Anyone)
+  const APPS_SCRIPT_EXEC = "https://script.google.com/macros/s/AKfycbyFQ_9M07jtexxLOhTizhN74x3iBGFk0KdVoWvvyxNV6ULbHlVrqjEyL6UbirqCV9wE/exec"; // e.g. https://script.google.com/macros/s/AKfy.../exec
+
+  if (!q || !APPS_SCRIPT_EXEC) {
+    document.write("Missing quote id or Apps Script URL.");
+  } else {
+    const payUrl = APPS_SCRIPT_EXEC + "?action=pay&q=" + encodeURIComponent(q);
+    // Top-level navigation to Apps Script (which returns a page that sends you to Stripe)
+    location.replace(payUrl);
+  }
+</script>
+<p>Redirecting to secure checkout…</p>
+<noscript>Please enable JavaScript and <a id="fallback" href="#">click here</a>.</noscript>
+<script>
+  // noscript fallback target (in case user enables JS after)
+  const a = document.getElementById('fallback');
+  if (a && typeof APPS_SCRIPT_EXEC === 'string') {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if (q) a.href = APPS_SCRIPT_EXEC + "?action=pay&q=" + encodeURIComponent(q);
+  }
 </script>
