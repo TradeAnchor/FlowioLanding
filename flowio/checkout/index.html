@@ -6,7 +6,7 @@
 (async () => {
   const qid = new URL(location).searchParams.get('q'); // e.g. ?q=Q0047
   if(!qid) { document.body.textContent = 'Missing quote id.'; return; }
-  const url = 'https://script.google.com/macros/s/AKfycbwJFefLhprXcdFk7prcY_FvGTa5z2YG8qxulfZV1LLD4nXq2hZLjNMKzF8Jhn8G5rak/exec?action=pay_json&q=' + encodeURIComponent(qid);
+  const url = 'https://script.google.com/macros/s/AKfycbyFQ_9M07jtexxLOhTizhN74x3iBGFk0KdVoWvvyxNV6ULbHlVrqjEyL6UbirqCV9wE/exec?action=pay_json&q=' + encodeURIComponent(qid);
   try {
     const r = await fetch(url, {credentials:'omit'});
     const j = await r.json();
