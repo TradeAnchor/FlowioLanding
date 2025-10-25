@@ -1,17 +1,17 @@
 <!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Redirecting to secure checkout…</title>
 <div style="font:16px system-ui;margin:24px">Opening Stripe…</div>
-
-<form id="f" method="GET"
-      action="https://script.google.com/macros/s/AKfycbwJFefLhprXcdFk7prcY_FvGTa5z2YG8qxulfZV1LLD4nXq2hZLjNMKzF8Jhn8G5rak/exec"
-      target="_self">
-  <input type="hidden" name="action" value="pay">
-  <input type="hidden" name="q" id="q">
-</form>
 <script>
-  const qid = new URL(location.href).searchParams.get('q');
-  if (!qid) { document.body.textContent = 'Missing quote id.'; }
-  else { document.getElementById('q').value = qid; document.getElementById('f').submit(); }
+(async () => {
+  const qid = new URL(location).searchParams.get('q'); // e.g. ?q=Q0047
+  if(!qid) { document.body.textContent = 'Missing quote id.'; return; }
+  const url = 'https://script.google.com/macros/s/AKfycbwJFefLhprXcdFk7prcY_FvGTa5z2YG8qxulfZV1LLD4nXq2hZLjNMKzF8Jhn8G5rak/exec?action=pay_json&q=' + encodeURIComponent(qid);
+  try {
+    const r = await fetch(url, {credentials:'omit'});
+    const j = await r.json();
+    if (j && j.url) location.replace(j.url);
+    else document.body.textContent = 'Could not start checkout.';
+  } catch(e){ document.body.textContent = 'Network error.'; }
+})();
 </script>
