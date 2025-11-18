@@ -1128,11 +1128,12 @@
         }
         
         // Video Modal
-        function openVideoModal() {
-            // TODO: Add Loom video modal or open in new tab
-            alert('https://www.youtube-nocookie.com/embed/sGLURAD867U?rel=0&modestbranding=1&playsinline=1');
-            if (window.plausible) plausible('Video View', {props: utmData});
-        }
+             <script>
+             function openVideoModal() {
+            window.open('https://www.youtube.com/watch?v=sGLURAD867U', '_blank', 'noopener');
+            if (window.plausible) plausible('Video View', { props: utmData });
+          }
+         </script>
         
         // Demo Form
         document.getElementById('demo-form').addEventListener('submit', async function(e) {
