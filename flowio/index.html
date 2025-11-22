@@ -164,19 +164,15 @@
             display: inline-block;
         }
 
-        /* --- BENEFITS SECTION - HORIZONTAL STACKED CARDS --- */
+        /* --- BENTO GRID BENEFITS (REDESIGNED) --- */
         .benefits-section { 
-            padding: 150px 0 250px; 
+            padding: 120px 0; 
             background: linear-gradient(180deg, white 0%, var(--bg-off) 100%);
-            position: relative;
-            overflow: visible;
         }
         
         .benefits-header {
             text-align: center;
-            margin-bottom: 100px;
-            position: relative;
-            z-index: 10;
+            margin-bottom: 60px;
         }
         .benefits-header h2 {
             font-size: 36px;
@@ -192,123 +188,156 @@
             margin: 0 auto;
         }
         
-        /* Stack Container - Fixed viewport positioning */
-        .benefits-stack-wrapper {
-            position: relative;
-            height: 800px; /* Scroll distance needed */
+        /* BENTO GRID LAYOUT */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
         
-        .benefits-stack {
-            position: sticky;
-            top: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 2000px;
-            height: 500px;
-        }
-        
-        /* Individual Cards - Absolute positioning for overlap */
-        .benefit-card {
-            position: absolute;
+        .bento-card {
             background: white;
-            padding: 48px;
             border-radius: 20px;
-            border: 2px solid var(--border);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 420px;
-            min-height: 280px;
-            transform-origin: center center;
-            will-change: transform;
-        }
-        
-        /* Initial stacked state - all cards centered */
-        .benefit-card[data-card="1"] {
-            z-index: 4;
-        }
-        
-        .benefit-card[data-card="2"] {
-            z-index: 3;
-            transform: scale(0.98) translateY(4px);
-        }
-        
-        .benefit-card[data-card="3"] {
-            z-index: 2;
-            transform: scale(0.96) translateY(8px);
-        }
-        
-        .benefit-card[data-card="4"] {
-            z-index: 1;
-            transform: scale(0.94) translateY(12px);
-        }
-        
-        .benefit-card:hover { 
-            transform: translateY(-8px) scale(1.02) !important;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2) !important;
-            border-color: var(--orange);
-            z-index: 100 !important;
-        }
-        
-        .benefit-card-inner {
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
         
-        .benefit-icon {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-hover) 100%);
-            border-radius: 16px;
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: var(--orange);
+        }
+        
+        /* Spans */
+        .bento-span-2 { grid-column: span 2; }
+        .bento-span-1 { grid-column: span 1; }
+        
+        .bento-content {
+            padding: 32px;
+            flex: 1;
+        }
+        
+        .bento-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .bento-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        /* Visual Area for Real Images */
+        .bento-visual {
+            background: var(--bg-off);
+            border-top: 1px solid var(--border);
+            height: 220px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+            position: relative;
+            overflow: hidden;
         }
         
-        .benefit-content {
+        /* --- MOCKUP VISUALS (CSS-based Placeholders for Real Screenshots) --- */
+        
+        /* Stripe Notification Mockup */
+        .mock-stripe {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 80%;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            align-items: center;
+            gap: 16px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .mock-stripe-icon {
+            width: 40px; height: 40px;
+            background: #635BFF;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 900; font-style: italic;
+        }
+        .mock-stripe-text { flex: 1; }
+        .mock-stripe-title { font-size: 12px; color: #64748B; font-weight: 600; }
+        .mock-stripe-amount { font-size: 18px; color: #0F172A; font-weight: 800; }
+        
+        /* Sheets Mockup */
+        .mock-sheet {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            width: 90%;
+            padding: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .mock-cell {
+            background: #F1F5F9;
+            height: 32px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .mock-cell.active {
+            background: white;
+            border: 2px solid #0F9D58;
+            display: flex; align-items: center; padding: 0 12px;
+            font-size: 12px; font-weight: 600; color: #334155;
         }
         
-        .benefit-title { 
-            font-weight: 800; 
-            font-size: 24px; 
-            color: var(--navy); 
-            line-height: 1.2;
-        }
-        
-        .benefit-desc { 
-            font-size: 16px; 
-            color: var(--text-muted); 
-            line-height: 1.6; 
-        }
-        
-        /* Glassmorphism overlay when stacked behind */
-        .benefit-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.9) 0%, 
-                rgba(255, 255, 255, 0.7) 100%
-            );
+        /* Phone PDF Mockup */
+        .mock-phone {
+            width: 140px; height: 240px;
+            background: #0F172A;
             border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-            z-index: 1;
+            padding: 8px;
+            position: relative;
+            top: 40px; /* Partial view */
         }
+        .mock-screen {
+            background: white;
+            width: 100%; height: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+        .mock-pdf-header { height: 40px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+        .mock-pdf-line { height: 8px; background: #E2E8F0; margin: 12px; border-radius: 4px; width: 60%; }
         
-        .benefit-card.stacked::before {
-            opacity: 1;
+        /* Drive Folder Mockup */
+        .mock-folder {
+            width: 80px; height: 60px;
+            background: #FFD04B;
+            border-radius: 0 6px 6px 6px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3);
         }
+        .mock-folder::before {
+            content: ''; position: absolute; top: -10px; left: 0;
+            width: 40px; height: 10px;
+            background: #FFD04B;
+            border-radius: 6px 6px 0 0;
+        }
+        .mock-folder::after {
+            content: 'CLIENTS'; position: absolute; bottom: -25px; left: 50%;
+            transform: translateX(-50%); font-size: 11px; font-weight: 700; color: #94A3B8;
+        }
+
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
 
         /* --- THE TEST DRIVE (FORM) --- */
         .demo-section { padding: 80px 0; background: var(--navy); color: white; position: relative; overflow: hidden; }
@@ -341,7 +370,8 @@
             margin-bottom: 8px;
         }
         
-        .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        /* UPDATED GRID: 340px for Text, Remainder for Form */
+        .demo-grid { display: grid; grid-template-columns: 340px 1fr; gap: 60px; align-items: start; }
         
         .demo-text p { font-size: 17px; opacity: 0.9; margin-bottom: 20px; line-height: 1.6; }
         
@@ -416,6 +446,29 @@
             color: var(--text-muted);
         }
         
+        /* New Input Cell Styling */
+        .sheet-input-cell {
+            width: 100%;
+            border: none;
+            padding: 10px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            outline: none;
+            color: var(--navy);
+            background: #FFFAF0; /* Very light orange to indicate editable */
+            transition: all 0.2s;
+        }
+        
+        .sheet-input-cell:focus {
+            background: white;
+            box-shadow: inset 0 0 0 2px var(--orange);
+        }
+        
+        .sheet-input-cell::placeholder {
+            color: #94A3B8;
+            font-style: italic;
+        }
+
         /* Items Table */
         .items-table-wrapper {
             border: 1px solid var(--border);
@@ -1434,48 +1487,15 @@
             
             .btn { width: 100%; justify-content: center; }
             
-            /* Mobile stacked cards - simplified */
-            .benefits-section {
-                padding: 80px 0 120px;
-            }
+            /* Mobile BENTO STACK */
+            .benefits-section { padding: 80px 0; }
+            .benefits-header h2 { font-size: 28px; }
             
-            .benefits-header h2 {
-                font-size: 28px;
-            }
+            .bento-grid { grid-template-columns: 1fr; gap: 24px; }
+            .bento-span-2, .bento-span-1 { grid-column: span 1; }
+            .bento-visual { height: 180px; }
             
-            .benefits-stack-wrapper {
-                height: 1200px; /* More scroll space on mobile */
-            }
-            
-            .benefits-stack {
-                height: 400px;
-            }
-            
-            .benefit-card {
-                padding: 32px 24px;
-                width: 90%;
-                max-width: 360px;
-                min-height: 240px;
-            }
-            
-            .benefit-card-inner {
-                gap: 16px;
-            }
-            
-            .benefit-icon {
-                width: 56px;
-                height: 56px;
-                font-size: 28px;
-            }
-            
-            .benefit-title {
-                font-size: 20px;
-            }
-            
-            .benefit-desc {
-                font-size: 15px;
-            }
-            
+            /* Demo Grid */
             .demo-text { text-align: center; }
             .demo-grid { grid-template-columns: 1fr; gap: 40px; }
             .demo-card { padding: 24px; }
@@ -1614,7 +1634,7 @@
                 <div class="scarcity-pill"><span></span>Setup: $1,800 · 2 Spots Left</div>
                 
                 <h1>Stop doing paperwork at 9:00 PM.</h1>
-                <p class="sub">We build the <strong>Flowio™ System</strong> into your Google Drive. Enterprise power, tradie simplicity.</p>
+                <p class="sub">We install the <strong>Flowio™ System</strong> into your business. The power of a $50k app, inside a simple Google Sheet.</p>
                 
                 <div class="hero-cta-group" style="display: flex; gap: 16px; flex-wrap: wrap;">
                     <a href="#test-drive" class="btn btn-primary">Test Drive It (30s)</a>
@@ -1636,54 +1656,78 @@
         </div>
     </section>
 
-    <!-- BENEFITS SECTION - HORIZONTAL STACKED CARDS -->
+    <!-- BENEFITS SECTION - BENTO GRID -->
     <section class="benefits-section">
         <div class="container">
             <div class="benefits-header">
                 <h2>Built for tradies who hate computers</h2>
                 <p>The power of a $50k enterprise app, inside a simple Google Sheet you already know how to use.</p>
             </div>
-        </div>
-        
-        <div class="benefits-stack-wrapper">
-            <div class="benefits-stack">
-                <div class="benefit-card" data-card="1">
-                    <div class="benefit-card-inner">
-                        <div class="benefit-icon">⚡</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Get Paid Faster</div>
-                            <div class="benefit-desc">"Instant Deposit" SMS links mean you wake up to cash in the bank. No more waiting 3 days for bank transfers or chasing invoices.</div>
+            
+            <div class="bento-grid">
+                <!-- Card 1: Payment (Large) -->
+                <div class="bento-card bento-span-2">
+                    <div class="bento-visual">
+                        <!-- Stripe Notification CSS Mockup -->
+                        <div class="mock-stripe">
+                            <div class="mock-stripe-icon">S</div>
+                            <div class="mock-stripe-text">
+                                <div class="mock-stripe-title">PAYMENT RECEIVED</div>
+                                <div class="mock-stripe-amount">$150.00 AUD</div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="bento-content">
+                        <div class="bento-title">⚡ Get Paid Faster</div>
+                        <div class="bento-desc">"Instant Deposit" SMS links mean you wake up to cash in the bank. No more waiting 3 days for bank transfers or chasing invoices.</div>
                     </div>
                 </div>
                 
-                <div class="benefit-card" data-card="2">
-                    <div class="benefit-card-inner">
-                        <div class="benefit-icon">🎯</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">No Mistakes</div>
-                            <div class="benefit-desc">System forces correct data entry. No more lost invoices, forgotten follow-ups, or missing line items that cost you money.</div>
+                <!-- Card 2: No Mistakes (Tall) -->
+                <div class="bento-card bento-span-1">
+                    <div class="bento-visual">
+                        <!-- Google Sheets CSS Mockup -->
+                        <div class="mock-sheet">
+                            <div class="mock-cell active">▼ Select Service Item</div>
+                            <div class="mock-cell"></div>
+                            <div class="mock-cell"></div>
+                            <div class="mock-cell"></div>
                         </div>
+                    </div>
+                    <div class="bento-content">
+                        <div class="bento-title">🎯 No Mistakes</div>
+                        <div class="bento-desc">System forces correct data entry. No more lost invoices or missing line items.</div>
                     </div>
                 </div>
                 
-                <div class="benefit-card" data-card="3">
-                    <div class="benefit-card-inner">
-                        <div class="benefit-icon">✨</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Look Professional</div>
-                            <div class="benefit-desc">Branded PDFs and automated SMS updates make you look like a Tier-1 firm. Your clients think you have an office team.</div>
+                <!-- Card 3: Look Pro (Standard) -->
+                <div class="bento-card bento-span-1">
+                    <div class="bento-visual">
+                        <!-- Phone PDF CSS Mockup -->
+                        <div class="mock-phone">
+                            <div class="mock-screen">
+                                <div class="mock-pdf-header"></div>
+                                <div class="mock-pdf-line"></div>
+                                <div class="mock-pdf-line" style="width: 80%"></div>
+                                <div class="mock-pdf-line" style="width: 40%"></div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="bento-content">
+                        <div class="bento-title">✨ Look Professional</div>
+                        <div class="bento-desc">Branded PDFs make you look like a Tier-1 firm.</div>
                     </div>
                 </div>
                 
-                <div class="benefit-card" data-card="4">
-                    <div class="benefit-card-inner">
-                        <div class="benefit-icon">🔒</div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Own Your Data</div>
-                            <div class="benefit-desc">Everything lives in your Google Drive forever. No monthly hostage fees. Stop paying, you still own your entire business history.</div>
-                        </div>
+                <!-- Card 4: Own Data (Wide) -->
+                <div class="bento-card bento-span-2">
+                    <div class="bento-visual">
+                        <!-- Drive Folder CSS Mockup -->
+                        <div class="mock-folder"></div>
+                    </div>
+                    <div class="bento-content">
+                        <div class="bento-title">🔒 Own Your Data</div>
+                        <div class="bento-desc">Everything lives in your Google Drive forever. No monthly hostage fees. Stop paying, you still own your entire business history.</div>
                     </div>
                 </div>
             </div>
@@ -1693,15 +1737,15 @@
     <!-- THE TEST DRIVE (INTERACTIVE 3-STAGE DEMO) -->
     <section id="test-drive" class="demo-section">
         <div class="container">
-            <div class="demo-header text-center" style="margin-bottom: 60px;">
-                <h2 style="font-size: 42px; font-weight: 900; margin-bottom: 20px;">Experience it. Right now. No signup.</h2>
-                <p style="font-size: 18px; opacity: 0.9;">This is the exact system your business will use. Watch it work in real-time.</p>
-            </div>
-
             <!-- STAGE 1: Job Selection -->
             <div id="stage-1" class="demo-stage">
                 <div class="demo-grid">
                     <div class="demo-text">
+                        <div style="margin-bottom: 40px;">
+                            <h2 style="font-size: 36px; font-weight: 900; margin-bottom: 16px; line-height: 1.2;">Experience it.<br>Right now.<br>No signup.</h2>
+                            <p style="font-size: 16px; opacity: 0.8;">This is the exact system your business will use. Watch it work in real-time.</p>
+                        </div>
+
                         <div class="stage-indicator">
                             <span class="stage-badge">STAGE 1</span>
                             <h3>This is your QuoteBuilder</h3>
@@ -1746,8 +1790,20 @@
                                     <div class="cell-value">Q0004</div>
                                 </div>
                                 <div class="table-row">
-                                    <div class="cell-label">Client</div>
+                                    <div class="cell-label">Client Name</div>
                                     <div class="cell-value">Sean Miller · Sydney, NSW</div>
+                                </div>
+                                <div class="table-row">
+                                    <div class="cell-label" style="color: var(--orange);">Client Mobile</div>
+                                    <div class="cell-value" style="padding: 0;">
+                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile to receive the live SMS alert...">
+                                    </div>
+                                </div>
+                                <div class="table-row">
+                                    <div class="cell-label" style="color: var(--orange);">Client Email</div>
+                                    <div class="cell-value" style="padding: 0;">
+                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email to receive the branded PDF quote...">
+                                    </div>
                                 </div>
                             </div>
                             
@@ -1759,9 +1815,9 @@
                                 <select id="job-select" class="sku-dropdown">
                                     <option value="">-- Select Item --</option>
                                     <option value="power-point">ELEC-002 · Power point add ($150)</option>
-                                    <option value="led-downlight">ELEC-003 · LED downlight x3 ($255)</option>
-                                    <option value="ceiling-fan">ELEC-005 · Ceiling Fan ($250)</option>
-                                    <option value="labour">GEN-002 · Labour x3 ($285)</option>
+                                    <option value="led-downlight">ELEC-003 · LED downlight supply+fit ($85)</option>
+                                    <option value="ceiling-fan">ELEC-005 · Install Ceiling Fan ($250)</option>
+                                    <option value="labour">GEN-002 · Labour ($95)</option>
                                 </select>
                             </div>
                             
@@ -1854,7 +1910,7 @@
                     
                     <div class="accept-header">
                         <h2>Accept Quote #Q0004</h2>
-                        <p class="accept-customer">Sean Miller · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a3d0c6c2cde3d7d1c2c7c6c2cdc0cbccd18dc0ccce8dc2d6">[email&#160;protected]</a> · 61494186989</p>
+                        <p class="accept-customer">Sean Miller · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3a0b6b2bd93a7a1b2b7b6b2bdb0bbbcaffdb0bcbe">[email&#160;protected]</a> · 61494186989</p>
                     </div>
                     
                     <div class="accept-summary">
@@ -2208,10 +2264,6 @@
     </footer>
 
     <script>
-        console.log('===========================================');
-        console.log('FLOWIO SCRIPT LOADED - TIMESTAMP: ' + new Date().toISOString());
-        console.log('===========================================');
-        
         // Job data with realistic pricing
         const jobData = {
             'power-point': { sku: 'ELEC-002', name: 'Power point add', qty: 1, rate: 150 },
@@ -2220,22 +2272,15 @@
             'labour': { sku: 'GEN-002', name: 'Labour', qty: 3, rate: 95 }
         };
         
-        console.log('Job data loaded:', jobData);
-        
         let selectedItems = [];
         let startTime;
         
-        console.log('Variables initialized');
-        
         // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== FLOWIO DEBUG: DOM Ready ===');
             
             // Update items display function
             function updateItemsDisplay() {
-                console.log('updateItemsDisplay called, items:', selectedItems);
                 const tbody = document.getElementById('selected-items');
-                console.log('tbody element:', tbody);
                 
                 if (selectedItems.length === 0) {
                     tbody.innerHTML = `
@@ -2258,19 +2303,14 @@
                     </tr>
                 `).join('');
                 
-                console.log('Setting innerHTML to:', html);
                 tbody.innerHTML = html;
-                console.log('tbody after update:', tbody.innerHTML);
             }
             
             // Update totals function
             function updateTotals() {
-                console.log('updateTotals called');
                 const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
                 const gst = subtotal * 0.1;
                 const total = subtotal + gst;
-                
-                console.log('Calculated totals:', {subtotal, gst, total});
                 
                 document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
                 document.getElementById('gst-display').textContent = `$${gst.toFixed(2)}`;
@@ -2279,64 +2319,32 @@
             
             // Handle job selection
             const jobSelect = document.getElementById('job-select');
-            console.log('job-select element:', jobSelect);
-            
-            if (!jobSelect) {
-                console.error('CRITICAL: job-select not found!');
-                return;
-            }
-            
-            console.log('Attaching change event listener...');
             
             jobSelect.addEventListener('change', function() {
-                console.log('=== CHANGE EVENT TRIGGERED ===');
                 const selectedValue = this.value;
-                console.log('Selected value:', selectedValue);
                 
-                if (!selectedValue) {
-                    console.log('No value selected, returning');
-                    return;
-                }
+                if (!selectedValue) return;
                 
                 const job = jobData[selectedValue];
-                if (!job) {
-                    console.error('Job not found for value:', selectedValue);
-                    console.log('Available jobs:', Object.keys(jobData));
-                    return;
-                }
-                
-                console.log('Found job:', job);
                 
                 // Check if already selected
                 if (selectedItems.find(item => item.sku === job.sku)) {
-                    console.log('Already selected, skipping');
                     this.value = '';
                     return;
                 }
                 
-                console.log('Adding to selectedItems...');
                 selectedItems.push({...job});
-                console.log('selectedItems is now:', selectedItems);
                 
-                console.log('Calling updateItemsDisplay...');
                 updateItemsDisplay();
-                
-                console.log('Calling updateTotals...');
                 updateTotals();
                 
                 // Enable generate button
                 const genBtn = document.getElementById('generate-btn');
-                console.log('generate-btn element:', genBtn);
                 genBtn.disabled = false;
-                console.log('generate-btn enabled');
                 
                 // Reset dropdown
                 this.value = '';
-                console.log('Dropdown reset');
-                console.log('=== END CHANGE EVENT ===');
             });
-            
-            console.log('Event listener attached successfully');
             
             // Generate Quote button
             document.getElementById('generate-btn').addEventListener('click', function() {
@@ -2365,8 +2373,12 @@
                     const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
                     document.getElementById('flowio-timer').textContent = `⚡ ${finalTime}s`;
                     
+                    // Capture user inputs if provided
+                    const userMobile = document.getElementById('user-mobile').value;
+                    const userEmail = document.getElementById('user-email').value;
+                    
                     // Generate quote HTML
-                    generateQuote();
+                    generateQuote(userMobile, userEmail);
                     
                     // Show stage 2
                     document.getElementById('stage-1').style.display = 'none';
@@ -2380,10 +2392,14 @@
         });
         
         // Generate Quote HTML
-        function generateQuote() {
+        function generateQuote(mobile, email) {
             const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
             const gst = subtotal * 0.1;
             const total = subtotal + gst;
+            
+            // Use user provided info or fallback
+            const clientEmail = email || 'sean@tradeanchor.com.au';
+            const clientPhone = mobile || '0491 570 156'; // Example Australian mobile
             
             const quoteHTML = `
                 <div class="quote-header">
@@ -2401,8 +2417,8 @@
                     <h3>Bill To:</h3>
                     <div class="quote-client-info">
                         <strong>Sean Miller</strong><br>
-                        sean@tradeanchor.com.au<br>
-                        61494186989<br>
+                        ${clientEmail}<br>
+                        ${clientPhone}<br>
                         Sydney, NSW
                     </div>
                 </div>
@@ -2564,3 +2580,16 @@
                 console.error(error);
                 // Still show success for demo
                 document.getElementById('sms-form').style.display = 'none';
+                document.getElementById('sms-success').style.display = 'block';
+            }
+        });
+        
+        // Close modal on overlay click
+        document.getElementById('accept-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAcceptModal();
+            }
+        });
+    </script>
+</body>
+</html>
