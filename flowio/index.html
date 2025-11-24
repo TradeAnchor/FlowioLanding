@@ -46,29 +46,76 @@
         .text-center { text-align: center; }
         .hidden { display: none; }
         
-        /* Buttons */
+        /* Mobile Break Utility */
+        .mobile-br { display: none; }
+        
+        /* --- VIBRANT BUTTONS --- */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 18px 32px;
-            font-size: 18px;
+            padding: 16px 32px;
+            font-size: 17px;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 12px;
             text-decoration: none;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.1s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
+            letter-spacing: -0.01em;
+            position: relative;
+            overflow: hidden;
         }
         
+        /* Primary Action (Test Drive) - Vibrant Orange */
         .btn-primary {
-            background: var(--orange);
+            background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
             color: white;
-            box-shadow: 0 4px 0 #C2410B;
+            box-shadow: 0 4px 0 #C2410B, 0 8px 20px -4px rgba(249, 115, 22, 0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         
-        .btn-primary:active { transform: translateY(4px); box-shadow: none; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #C2410B, 0 15px 25px -5px rgba(249, 115, 22, 0.6);
+            filter: brightness(1.05);
+        }
+        
+        .btn-primary:active { 
+            transform: translateY(2px); 
+            box-shadow: 0 2px 0 #C2410B; 
+        }
+
+        /* Shine effect for primary button */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        .btn-primary:hover::after { left: 150%; transition: 0.7s ease-in-out; }
+        
+        /* Secondary Action (Book Demo) - Navy Professional */
+        .btn-navy {
+            background: var(--navy);
+            color: white;
+            box-shadow: 0 4px 0 #020617, 0 4px 12px rgba(15, 23, 42, 0.3);
+        }
+        
+        .btn-navy:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #020617, 0 10px 20px rgba(15, 23, 42, 0.4);
+        }
+        
+        .btn-navy:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #020617;
+        }
         
         .btn-secondary {
             background: white;
@@ -117,10 +164,17 @@
 
         /* --- HEADER --- */
         header {
-            position: absolute; top: 40px; width: 100%;
-            background: transparent;
+            /* Changed from absolute to fixed to stick on scroll */
+            position: fixed; 
+            top: 40px; /* Sits right below the 40px scarcity bar */
+            width: 100%;
+            /* Added background so content doesn't show through messily */
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
             z-index: 1000;
-            padding: 20px 0;
+            padding: 16px 0;
+            transition: all 0.3s ease;
         }
         header .flex { display: flex; justify-content: space-between; align-items: center; }
         
@@ -495,6 +549,9 @@
             color: var(--navy);
             background: #FFFAF0; /* Very light orange to indicate editable */
             transition: all 0.2s;
+            /* Ensure it fits in container */
+            box-sizing: border-box;
+            display: block;
         }
         
         .sheet-input-cell:focus {
@@ -1493,7 +1550,17 @@
         /* --- FOUNDER / TRUST --- */
         .founder-section { padding: 80px 0; background: var(--bg-off); border-top: 1px solid var(--border); }
         .founder-grid { display: grid; grid-template-columns: 100px 1fr; gap: 30px; max-width: 800px; margin: 0 auto; align-items: center; }
-        .avatar { width: 100px; height: 100px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 32px; }
+        
+        /* Updated for Image */
+        .avatar { 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 50%; 
+            object-fit: cover; /* Ensures the photo fills the circle perfectly */
+            border: 4px solid white; 
+            box-shadow: var(--shadow-lg);
+            display: block;
+        }
 
         /* --- STICKY MOBILE CTA --- */
         .mobile-sticky-cta {
@@ -1514,7 +1581,7 @@
             
             /* Updated: Hide only the button in Hero CTA, keep text visible */
             .hero-cta-group .btn { display: none; } 
-            .hero-cta-group { width: 100% !important; align-items: flex-start; }
+            .hero-cta-group { width: 100% !important; align-items: center; margin-top: 0; } /* Centered text */
             
             .hero { padding-top: 80px; padding-bottom: 40px; }
             
@@ -1526,20 +1593,23 @@
             .hero-grid { 
                 display: flex;
                 flex-direction: column;
-                gap: 32px;
+                gap: 24px;
             }
             
+            /* "display: contents" allows us to reorder children of .hero-content 
+               alongside .hero-visual as if they were all siblings */
             .hero-content {
-                display: flex;
-                flex-direction: column;
+                display: contents;
             }
             
             .hero h1 { order: 1; }
             .hero p.sub { order: 2; }
-            /* Video moves here visually via flex order */
-            .hero-visual { order: 3; width: 100%; margin-bottom: 24px; }
-            /* Trust section (now in CTA group) follows video */
-            .hero-cta-group { order: 4; margin-top: -10px; }
+            
+            /* Video is now perfectly sandwiched */
+            .hero-visual { order: 3; width: 100%; margin-bottom: 12px; }
+            
+            /* Text comes last */
+            .hero-cta-group { order: 4; }
             
             .video-frame { transform: none; }
             
@@ -1639,10 +1709,10 @@
         <div class="container flex">
             <a href="#" class="logo-wrapper">
                 <!-- Replaced SVG with Image as requested -->
-                <img src="logo.png" alt="TradeAnchor Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <img src="images/logo.png" alt="TradeAnchor Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                 <div class="logo-text" style="display:none;">Trade<span>Anchor</span></div>
             </a>
-            <a href="#test-drive" class="btn btn-primary nav-cta">Test Drive</a>
+            <a href="#funnel-cta" class="btn btn-navy nav-cta">Book a Demo</a>
         </div>
     </header>
 
@@ -1651,7 +1721,7 @@
         <div class="container hero-grid">
             <div class="hero-content">
                 
-                <h1>Stop doing paperwork at 9:00 PM.</h1>
+                <h1>Stop doing<br class="mobile-br"> paperwork at<br class="mobile-br"> 9:00 PM.</h1>
                 <p class="sub">Flowio does your quoting, booking, and follow-ups inside Google Sheets you already use.</p>
                 
                 <!-- Unified CTA & Trust Group -->
@@ -1675,7 +1745,7 @@
             <div class="hero-visual">
                 <div class="video-frame">
                     <div class="video-wrapper">
-                        <iframe src="https://www.youtube-nocookie.com/embed/Z2NO3qIiP5c?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+                        <iframe id="hero-video" src="https://www.youtube-nocookie.com/embed/Z2NO3qIiP5c?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -1822,13 +1892,15 @@
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Mobile</div>
                                     <div class="cell-value" style="padding: 0;">
-                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile to receive the live SMS alert...">
+                                        <!-- Shortened placeholder for mobile -->
+                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile for SMS demo...">
                                     </div>
                                 </div>
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Email</div>
                                     <div class="cell-value" style="padding: 0;">
-                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email to receive the branded PDF quote...">
+                                        <!-- Shortened placeholder for mobile -->
+                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email for PDF demo...">
                                     </div>
                                 </div>
                             </div>
@@ -2269,7 +2341,8 @@
     <!-- FOUNDER / TRUST -->
     <section class="founder-section">
         <div class="container founder-grid">
-            <div class="avatar">ME</div>
+            <!-- UPDATED: Pointing to images folder -->
+            <img src="images/founder.jpg" alt="Founder Profile" class="avatar">
             <div>
                 <h3 style="color: var(--navy); font-weight: 800; margin-bottom: 8px;">I'm not a SaaS Company.</h3>
                 <p style="color: var(--text-muted);">I'm a local Systems Engineer based in Sydney. I don't just send you a login and wish you good luck. I come to your business (or Zoom), I set up your price list, I connect your bank, and I train your team. You get a partner, not just a tool.</p>
@@ -2296,6 +2369,24 @@
     </div>
 
     <script>
+        // Auto-play video logic
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var iframe = document.getElementById('hero-video');
+                if (iframe) {
+                    var src = iframe.src;
+                    // Add autoplay and mute parameters if not present
+                    if (src.indexOf('autoplay') === -1) {
+                        src += "&autoplay=1";
+                    }
+                    if (src.indexOf('mute') === -1) {
+                        src += "&mute=1";
+                    }
+                    iframe.src = src;
+                }
+            }, 2000);
+        });
+
         // Job data with realistic pricing
         const jobData = {
             'power-point': { sku: 'ELEC-002', name: 'Power point add', qty: 1, rate: 150 },
@@ -2325,13 +2416,14 @@
                     return;
                 }
                 
+                // Added data-label attributes so mobile CSS works correctly
                 const html = selectedItems.map((item, index) => `
                     <tr>
-                        <td class="sku-col">${item.sku}</td>
-                        <td>${item.name}</td>
-                        <td class="qty-col">${item.qty}</td>
-                        <td class="rate-col">$${item.rate.toFixed(2)}</td>
-                        <td class="total-col">$${(item.qty * item.rate).toFixed(2)}</td>
+                        <td class="sku-col" data-label="SKU">${item.sku}</td>
+                        <td data-label="Item">${item.name}</td>
+                        <td class="qty-col" data-label="Qty">${item.qty}</td>
+                        <td class="rate-col" data-label="Rate">$${item.rate.toFixed(2)}</td>
+                        <td class="total-col" data-label="Total">$${(item.qty * item.rate).toFixed(2)}</td>
                     </tr>
                 `).join('');
                 
