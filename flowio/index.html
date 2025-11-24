@@ -38,7 +38,8 @@
             background: var(--bg);
             line-height: 1.6;
             overflow-x: hidden;
-            padding-top: 110px; /* Space for top bar */
+            /* Padding for top fixed elements (Scarcity + Header) */
+            padding-top: 110px; 
         }
 
         img { max-width: 100%; display: block; }
@@ -48,14 +49,15 @@
         .text-center { text-align: center; }
         .hidden { display: none !important; }
         .nowrap { white-space: nowrap; }
+        .mobile-br { display: none; }
         
-        /* --- BUTTONS --- */
+        /* --- BUTTONS (Mobile Default) --- */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 16px 24px;
+            padding: 16px 24px; /* Mobile friendly padding */
             font-size: 16px;
             font-weight: 700;
             border-radius: 12px;
@@ -66,9 +68,10 @@
             letter-spacing: -0.01em;
             position: relative;
             overflow: hidden;
-            width: 100%;
+            width: 100%; /* Full width on mobile */
         }
         
+        /* Primary Action (Test Drive) - Vibrant Orange */
         .btn-primary {
             background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
             color: white;
@@ -76,11 +79,29 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #C2410B; }
+
+        /* Shine effect */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        .btn-primary:hover::after { left: 150%; transition: 0.7s ease-in-out; }
         
+        /* Secondary Action (Book Demo) - Navy */
         .btn-navy {
             background: var(--navy);
             color: white;
             box-shadow: 0 4px 0 #020617, 0 4px 12px rgba(15, 23, 42, 0.3);
+        }
+        .btn-navy:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #020617, 0 10px 20px rgba(15, 23, 42, 0.4);
         }
         
         .btn-white {
@@ -89,7 +110,7 @@
             box-shadow: 0 4px 0 #CBD5E1;
         }
 
-        /* --- HEADER STACK --- */
+        /* --- HEADER STACK (Mobile First) --- */
         .top-scarcity-bar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -117,7 +138,7 @@
 
         header {
             position: fixed; 
-            top: 37px; 
+            top: 37px; /* Below scarcity bar */
             width: 100%;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
@@ -131,37 +152,73 @@
         .logo-img { height: 32px; width: auto; display: block; }
         .logo-text { font-size: 20px; font-weight: 900; color: var(--navy); letter-spacing: -0.03em; line-height: 1; }
         .logo-text span { color: var(--orange); }
-        .nav-cta { display: none; }
+        .nav-cta { display: none; } /* Hidden on mobile */
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (Mobile Stack) --- */
         .hero { 
             padding: 40px 0 60px; 
             background: linear-gradient(to bottom, var(--bg-off), white); 
         }
         
         .hero-grid { display: flex; flex-direction: column; gap: 32px; }
+        
+        /* Mobile Order: Text -> Video -> Trust */
         .hero-content { display: contents; }
         
         .hero h1 { 
-            order: 1; font-size: 36px; line-height: 1.1; font-weight: 900; color: var(--navy); letter-spacing: -0.03em; margin-bottom: 16px; 
+            order: 1;
+            font-size: 36px; 
+            line-height: 1.1; 
+            font-weight: 900; 
+            color: var(--navy); 
+            letter-spacing: -0.03em; 
+            margin-bottom: 16px; 
         }
         
         .hero p.sub { 
-            order: 2; font-size: 17px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; 
+            order: 2;
+            font-size: 17px; 
+            color: var(--text-muted); 
+            margin-bottom: 24px; 
+            line-height: 1.5; 
         }
         
-        .hero-visual { order: 3; width: 100%; margin-bottom: 12px; }
+        .hero-visual { 
+            order: 3; 
+            width: 100%; 
+            margin-bottom: 12px; 
+        }
         
         .hero-cta-group { 
-            order: 4; display: flex; flex-direction: column; gap: 12px; width: 100%; align-items: center; 
+            order: 4; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            width: 100%;
+            align-items: center;
         }
+        
+        /* Hide main CTA button on mobile (use sticky bar) */
         .hero-cta-group .btn { display: none; }
         
-        .hero-trust { font-size: 14px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; align-items: center; }
+        .hero-trust {
+            font-size: 14px;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
         .hero-trust-row { display: flex; align-items: center; gap: 6px; }
         .hero-trust .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
 
-        .video-frame { background: var(--navy); padding: 10px; border-radius: 16px; box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.35); }
+        .video-frame {
+            background: var(--navy);
+            padding: 10px; 
+            border-radius: 16px;
+            box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.35);
+            transform: none; /* Straightened video */
+        }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: black; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
@@ -185,15 +242,15 @@
         .demo-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
         .demo-card { background: white; color: var(--text-main); border-radius: 12px; overflow: hidden; }
         
-        /* Spreadsheet Mobile */
         .sheets-header { background: #0F9D58; color: white; padding: 10px 16px; }
         .sheets-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .sheets-content { padding: 16px; }
         
+        /* Stacked Inputs for Mobile */
         .compact-table { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
         .table-row { display: flex; flex-direction: column; border-bottom: 1px solid var(--border); padding: 8px 0; }
         .table-row:last-child { border-bottom: none; }
-        .table-row.header-row { display: none; }
+        .table-row.header-row { display: none; } /* Hide headers on mobile */
         
         .cell-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 4px 12px; }
         .cell-value { padding: 4px 12px 8px; }
@@ -215,11 +272,11 @@
         .total-row.final { font-size: 18px; font-weight: 800; color: var(--navy); border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
         .sheets-generate-btn { width: 100%; padding: 16px; background: #0F9D58; color: white; font-size: 16px; font-weight: 700; border: none; border-radius: 8px; }
 
-        /* --- OTHER SECTIONS --- */
+        /* --- LOGIC TABLE (Restored) --- */
         .logic-section { padding: 60px 0; background: white; }
         .section-header h2 { font-size: 28px; font-weight: 900; color: var(--navy); margin-bottom: 20px; }
         
-        /* Logic Table - Mobile Card View */
+        /* Mobile Card View for Comparison */
         .table-scroll table, .table-scroll thead, .table-scroll tbody, .table-scroll th, .table-scroll td, .table-scroll tr { display: block; }
         .table-scroll thead tr { position: absolute; top: -9999px; left: -9999px; }
         .table-scroll tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
@@ -228,6 +285,7 @@
         .check { color: var(--green); font-weight: 700; }
         .cross { color: var(--text-muted); }
 
+        /* --- PRICING (Restored) --- */
         .offer-section { padding: 60px 0; background: var(--bg-off); }
         .offer-card { background: white; padding: 40px 20px; border-radius: 24px; border: 2px solid var(--navy); text-align: center; position: relative; }
         .tag { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--orange); color: white; padding: 8px 24px; border-radius: 20px; font-weight: 700; font-size: 14px; text-transform: uppercase; }
@@ -236,26 +294,31 @@
         .checklist li { list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
         .checklist svg { color: var(--green); flex-shrink: 0; }
 
+        /* --- FUNNEL (Restored) --- */
         .funnel-section { padding: 80px 0; background: var(--navy); color: white; text-align: center; }
         .funnel-section h2 { font-size: 32px; font-weight: 900; margin-bottom: 24px; }
         .funnel-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        
+        .text-option { margin-top: 32px; font-size: 16px; opacity: 0.7; }
+        .text-option strong { color: white; opacity: 1; font-weight: 700; }
+
+        /* --- FAQ (Restored) --- */
         .faq-section { padding: 60px 0; background: white; }
         .faq-item { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
         .faq-item summary { padding: 16px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: var(--bg-off); color: var(--navy); }
         .faq-item p { padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border); }
 
+        /* --- FOUNDER (Restored) --- */
         .founder-section { padding: 60px 0; background: var(--bg-off); border-top: 1px solid var(--border); }
         .founder-grid { display: flex; flex-direction: column; text-align: center; align-items: center; gap: 20px; }
         
-        /* FIX: Force Founder Image Size */
+        /* FORCE IMAGE SIZE */
         .avatar { 
             width: 100px !important; 
             height: 100px !important; 
             border-radius: 50%; 
             object-fit: cover; 
             border: 4px solid white; 
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
             display: block;
         }
 
@@ -267,6 +330,8 @@
             body { padding-top: 0; }
             .container { padding: 0 40px; }
             .btn { width: auto; }
+            .mobile-br { display: inline; } /* Show breaks on desktop if needed or hide */
+            
             .top-scarcity-bar { font-size: 14px; }
             header { padding: 16px 0; top: 38px; }
             .logo-img { height: 40px; }
@@ -293,7 +358,7 @@
             .demo-text h2 { font-size: 42px; }
             .demo-grid { grid-template-columns: 340px 1fr; }
             
-            /* Desktop Table Styles */
+            /* Desktop Table (Side by Side) */
             .sheets-content { padding: 24px; }
             .table-row { display: grid; grid-template-columns: 140px 1fr; border-bottom: 1px solid var(--border); padding: 0; }
             .table-row.header-row { display: grid; }
@@ -337,11 +402,13 @@
 </head>
 <body>
 
+    <!-- TOP SCARCITY BAR -->
     <div class="top-scarcity-bar">
         <span class="pulsing-dot"></span>
         <span>Only 2 installs available this week</span>
     </div>
 
+    <!-- HEADER -->
     <header>
         <div class="container flex">
             <a href="#" class="logo-wrapper">
@@ -352,13 +419,17 @@
         </div>
     </header>
 
+    <!-- HERO -->
     <section class="hero">
         <div class="container hero-grid">
             <div class="hero-content">
+                <!-- Mobile-First Order: H1, Sub, Visual, CTA/Trust -->
                 <h1>Stop doing paperwork<br class="mobile-br"> at <span class="nowrap">9:00 PM.</span></h1>
                 <p class="sub">Flowio does your quoting, booking, and follow-ups inside Google Sheets you already use.</p>
+                
                 <div class="hero-cta-group">
                     <a href="#test-drive" class="btn btn-primary">Test Drive It (30s)</a>
+                    
                     <div class="hero-trust">
                         <div class="hero-trust-row"><span class="dot"></span><span>100% Google Native. Zero Learning Curve.</span></div>
                         <div class="hero-trust-row"><span class="dot"></span><span>No subscription - one-time setup</span></div>
@@ -467,13 +538,13 @@
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Mobile</div>
                                     <div class="cell-value">
-                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile for SMS demo...">
+                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile for live SMS alert...">
                                     </div>
                                 </div>
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Email</div>
                                     <div class="cell-value">
-                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email for PDF demo...">
+                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email for branded PDF quote...">
                                     </div>
                                 </div>
                             </div>
@@ -514,6 +585,8 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Hidden Stages (Populated by JS) -->
             <div id="stage-2" class="demo-stage hidden"></div>
             <div id="accept-modal" class="modal-overlay hidden"></div>
             <div id="behind-scenes" class="demo-stage hidden"></div>
@@ -521,14 +594,13 @@
         </div>
     </section>
 
-    <!-- LOGIC SECTION (Restored) -->
+    <!-- LOGIC SECTION -->
     <section class="logic-section">
         <div class="container">
-            <div class="section-header text-center" style="margin-bottom: 60px;">
-                <h2 style="font-size: 36px; font-weight: 900; color: var(--navy);">Why 78% of Tradies Quit SaaS Apps</h2>
-                <p style="font-size: 18px; color: var(--text-muted);">They are too complicated. Spreadsheets are too manual. <br><strong>Flowio</strong> is the best of both worlds.</p>
+            <div class="section-header text-center" style="margin-bottom: 40px;">
+                <h2>Why 78% of Tradies Quit SaaS Apps</h2>
+                <p>They are too complicated. Spreadsheets are too manual. Flowio is the best of both worlds.</p>
             </div>
-
             <div class="table-scroll">
                 <table>
                     <thead>
@@ -570,33 +642,27 @@
         </div>
     </section>
 
-    <!-- PRICING (Restored) -->
+    <!-- PRICING -->
     <section class="offer-section">
         <div class="container">
             <div class="offer-card">
                 <div class="tag">Pilot Pricing</div>
-                <h2 style="margin-bottom: 10px; color: var(--navy); font-weight: 800;">The "Done-For-You" Build</h2>
+                <h2>The "Done-For-You" Build</h2>
                 <div class="price-big">$1,800</div>
                 <div class="price-sub">One-time Setup Fee (Tax Deductible)</div>
-                
                 <ul class="checklist">
                     <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Custom Branding (Logo & Colors)</li>
                     <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Stripe Payment Integration</li>
                     <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> SMS & Calendar Automation</li>
                     <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> <strong>Iron-Clad Guarantee:</strong> Save 5hrs/week or full refund.</li>
                 </ul>
-
                 <a href="#funnel-cta" class="btn btn-primary" style="width: 100%;">Book Your Build</a>
-                
-                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted); line-height: 1.4;">
-                    +$99/mo Tech Management Fee.<br>
-                    (Covers SMS costs, API monitoring, Hosting, & Break-Fix Support).
-                </p>
+                <p style="margin-top:16px; font-size:13px; opacity:0.7;">+$99/mo Tech Management Fee. (Covers SMS costs, API monitoring, Hosting, & Break-Fix Support).</p>
             </div>
         </div>
     </section>
 
-    <!-- FUNNEL CTA (Restored) -->
+    <!-- FUNNEL CTA -->
     <section id="funnel-cta" class="funnel-section">
         <div class="container funnel-card">
             <h2>I only onboard 3 trades per week to ensure quality.</h2>
@@ -604,7 +670,6 @@
             
             <div class="funnel-actions">
                 <a href="https://calendly.com/" target="_blank" class="btn btn-white">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     Book A 15-Min Demo Call
                 </a>
             </div>
@@ -616,38 +681,33 @@
         </div>
     </section>
 
-    <!-- FAQ (Restored) -->
+    <!-- FAQ -->
     <section class="faq-section">
         <div class="container">
             <div class="section-header text-center" style="margin-bottom: 40px;">
-                <h2 style="font-size: 32px; font-weight: 900; color: var(--navy);">Common Questions</h2>
+                <h2>Common Questions</h2>
             </div>
             <div class="faq-list">
                 <details class="faq-item">
                     <summary>How long until I'm live?</summary>
                     <p>48 hours from payment to first quote sent. We handle the entire setup — you just need to provide your logo, company details, and Stripe account.</p>
                 </details>
-                
                 <details class="faq-item">
                     <summary>Can I try it first?</summary>
                     <p>Yes — we'll send you a demo quote link so you can see exactly what your customers will experience. No payment required for the demo.</p>
                 </details>
-                
                 <details class="faq-item">
                     <summary>Does it work on mobile?</summary>
                     <p>Yes. Customers accept on their phones (mobile-optimized page). You can create quotes from job sites using our big-button Quick Quote form.</p>
                 </details>
-                
                 <details class="faq-item">
                     <summary>What if something breaks?</summary>
                     <p>We auto-email you with the error + context. 12 months of break-fix support included (covers Google/Stripe/Xero changes, template fixes, auth issues).</p>
                 </details>
-                
                 <details class="faq-item">
                     <summary>Do customers pay card fees?</summary>
                     <p>Optional. You can pass through Stripe card fees, or absorb them. Your choice.</p>
                 </details>
-                
                 <details class="faq-item">
                     <summary>Does it work with Xero?</summary>
                     <p>Yes — Xero draft invoice is available on request (optional add-on).</p>
@@ -656,7 +716,7 @@
         </div>
     </section>
 
-    <!-- FOUNDER (Restored) -->
+    <!-- FOUNDER -->
     <section class="founder-section">
         <div class="container founder-grid">
             <img src="images/founder.jpg" alt="Founder Profile" class="avatar">
@@ -693,6 +753,7 @@
                 if (iframe) {
                     var src = iframe.src;
                     if (src.indexOf('autoplay') === -1) src += "&autoplay=1";
+                    // Note: Mute is required for autoplay to work in modern browsers
                     if (src.indexOf('mute') === -1) src += "&mute=1";
                     iframe.src = src;
                 }
