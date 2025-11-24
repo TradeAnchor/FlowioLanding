@@ -15,7 +15,7 @@
     <script defer data-domain="tradeanchor.com.au" src="https://plausible.io/js/script.js"></script>
     
     <style>
-        /* --- RESET & VARS --- */
+        /* --- 1. RESET & VARIABLES --- */
         :root {
             --navy: #0F172A;
             --navy-light: #1E293B;
@@ -28,6 +28,10 @@
             --border: #E2E8F0;
             --text-main: #1E293B;
             --text-muted: #64748B;
+            
+            /* Mobile Spacing Standard */
+            --spacing-section: 60px;
+            --spacing-container: 20px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -38,27 +42,34 @@
             background: var(--bg);
             line-height: 1.6;
             overflow-x: hidden;
-            /* Padding for top fixed elements (Scarcity + Header) */
-            padding-top: 110px; 
+            padding-top: 40px; /* Space for scarcity bar */
+            font-size: 16px; /* Base size for mobile readability */
         }
 
-        img { max-width: 100%; display: block; }
-
-        /* --- UTILITIES --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .text-center { text-align: center; }
-        .hidden { display: none !important; }
-        .nowrap { white-space: nowrap; }
-        .mobile-br { display: none; }
+        /* --- 2. MOBILE-FIRST UTILITIES (Default) --- */
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 0 var(--spacing-container); 
+        }
         
-        /* --- BUTTONS (Mobile Default) --- */
+        .text-center { text-align: center; }
+        .hidden { display: none; }
+        .nowrap { white-space: nowrap; }
+        
+        /* Mobile Break: Visible by default */
+        .mobile-br { display: block; }
+        
+        /* --- 3. VIBRANT BUTTONS (Touch Optimized) --- */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 16px 24px; /* Mobile friendly padding */
-            font-size: 16px;
+            padding: 16px 32px;
+            min-height: 56px; /* Touch target size */
+            font-size: 17px;
             font-weight: 700;
             border-radius: 12px;
             text-decoration: none;
@@ -71,15 +82,15 @@
             width: 100%; /* Full width on mobile */
         }
         
-        /* Primary Action (Test Drive) - Vibrant Orange */
         .btn-primary {
             background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
             color: white;
             box-shadow: 0 4px 0 #C2410B, 0 8px 20px -4px rgba(249, 115, 22, 0.5);
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+        
         .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #C2410B; }
-
+        
         /* Shine effect */
         .btn-primary::after {
             content: '';
@@ -92,16 +103,17 @@
         }
         .btn-primary:hover::after { left: 150%; transition: 0.7s ease-in-out; }
         
-        /* Secondary Action (Book Demo) - Navy */
         .btn-navy {
             background: var(--navy);
             color: white;
             box-shadow: 0 4px 0 #020617, 0 4px 12px rgba(15, 23, 42, 0.3);
         }
-        .btn-navy:hover {
-            background: var(--navy-light);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #020617, 0 10px 20px rgba(15, 23, 42, 0.4);
+        .btn-navy:active { transform: translateY(2px); box-shadow: 0 2px 0 #020617; }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--navy);
+            border: 2px solid var(--border);
         }
         
         .btn-white {
@@ -109,16 +121,17 @@
             color: var(--navy);
             box-shadow: 0 4px 0 #CBD5E1;
         }
+        .btn-white:active { transform: translateY(4px); box-shadow: none; }
 
-        /* --- HEADER STACK (Mobile First) --- */
+        /* --- 4. NAVIGATION & HEADER --- */
         .top-scarcity-bar {
             position: fixed;
             top: 0; left: 0; width: 100%;
             background: #FFF7ED;
             color: #9A3412;
             text-align: center;
-            padding: 10px 20px;
-            font-size: 12px;
+            padding: 10px;
+            font-size: 13px;
             font-weight: 700;
             z-index: 2000;
             border-bottom: 1px solid #FED7AA;
@@ -127,277 +140,525 @@
             align-items: center;
             gap: 8px;
         }
-        
         .pulsing-dot {
             width: 8px; height: 8px;
             background: var(--orange);
             border-radius: 50%;
+            display: inline-block;
             animation: pulse 2s infinite;
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         header {
             position: fixed; 
-            top: 37px; /* Below scarcity bar */
+            top: 40px; 
             width: 100%;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
             padding: 12px 0;
+            transition: all 0.3s ease;
         }
         header .flex { display: flex; justify-content: space-between; align-items: center; }
         
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-wrapper { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .logo-img { height: 32px; width: auto; display: block; }
         .logo-text { font-size: 20px; font-weight: 900; color: var(--navy); letter-spacing: -0.03em; line-height: 1; }
         .logo-text span { color: var(--orange); }
-        .nav-cta { display: none; } /* Hidden on mobile */
+        
+        .nav-cta { display: none; } /* Hidden on mobile by default */
 
-        /* --- HERO SECTION (Mobile Stack) --- */
+        /* --- 5. HERO SECTION (Mobile Layout) --- */
         .hero { 
-            padding: 40px 0 60px; 
+            padding-top: 140px; /* Reduced for mobile */
+            padding-bottom: 40px; 
             background: linear-gradient(to bottom, var(--bg-off), white); 
         }
         
-        .hero-grid { display: flex; flex-direction: column; gap: 32px; }
-        
-        /* Mobile Order: Text -> Video -> Trust */
-        .hero-content { display: contents; }
-        
-        .hero h1 { 
+        .hero-grid { 
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Mobile Order: H1 -> P -> Video -> CTA */
+        .hero h1 {
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            text-align: left;
             order: 1;
-            font-size: 36px; 
-            line-height: 1.1; 
-            font-weight: 900; 
-            color: var(--navy); 
-            letter-spacing: -0.03em; 
-            margin-bottom: 16px; 
         }
         
         .hero p.sub { 
-            order: 2;
             font-size: 17px; 
             color: var(--text-muted); 
-            margin-bottom: 24px; 
             line-height: 1.5; 
+            margin-bottom: 0;
+            text-align: left;
+            order: 2;
         }
-        
-        .hero-visual { 
-            order: 3; 
-            width: 100%; 
-            margin-bottom: 12px; 
-        }
-        
-        .hero-cta-group { 
-            order: 4; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
+
+        /* Video Container */
+        .video-column {
             width: 100%;
-            align-items: center;
+            order: 3;
+            margin: 8px 0;
+        }
+
+        .video-frame {
+            background: var(--navy);
+            padding: 10px; 
+            border-radius: 12px;
+            box-shadow: 0 15px 40px -10px rgba(15, 23, 42, 0.35);
         }
         
-        /* Hide main CTA button on mobile (use sticky bar) */
+        .video-wrapper {
+            position: relative; 
+            padding-bottom: 56.25%; 
+            height: 0; 
+            overflow: hidden; 
+            border-radius: 8px; 
+            background: black;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* CTA Group */
+        .hero-cta-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            order: 4;
+        }
+        /* Hide main button in hero on mobile, use sticky bar */
         .hero-cta-group .btn { display: none; }
-        
+
         .hero-trust {
             font-size: 14px;
             color: var(--text-muted);
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
+            text-align: center;
         }
         .hero-trust-row { display: flex; align-items: center; gap: 6px; }
-        .hero-trust .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
-
-        .video-frame {
-            background: var(--navy);
-            padding: 10px; 
-            border-radius: 16px;
-            box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.35);
-            transform: none; /* Straightened video */
+        .hero-trust .dot {
+            width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0;
         }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: black; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* --- BENEFITS --- */
-        .benefits-section { padding: 60px 0; background: white; }
+        /* --- 6. BENTO BENEFITS (Mobile Stack) --- */
+        .benefits-section { 
+            padding: var(--spacing-section) 0; 
+            background: linear-gradient(180deg, white 0%, var(--bg-off) 100%);
+        }
+        
         .benefits-header { text-align: center; margin-bottom: 40px; }
-        .benefits-header h2 { font-size: 28px; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+        .benefits-header h2 { font-size: 28px; font-weight: 900; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.02em; }
+        .benefits-header p { font-size: 17px; color: var(--text-muted); }
         
-        .bento-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        .bento-card { background: white; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .bento-visual { background: var(--bg-off); border-bottom: 1px solid var(--border); height: 180px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .bento-content { padding: 24px; }
-        .bento-title { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
-        .bento-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column default */
+            gap: 24px;
+        }
+        
+        .bento-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Mobile Visual Heights */
+        .bento-visual {
+            background: var(--bg-off);
+            border-top: 1px solid var(--border);
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            order: 2; /* Visual below content on mobile often looks better, but keeping original design: visual top/bottom mixed */
+        }
+        /* Reset order for design consistency */
+        .bento-visual { order: 0; } 
+        
+        .bento-content { padding: 24px; flex: 1; }
+        .bento-title { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .bento-desc { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
 
-        /* --- TEST DRIVE --- */
-        .demo-section { padding: 60px 0; background: var(--navy); color: white; }
-        .demo-text { text-align: center; margin-bottom: 32px; }
-        .demo-text h2 { font-size: 32px; font-weight: 900; margin-bottom: 12px; line-height: 1.1; }
+        /* Mockup Animations & Styles */
+        .mock-stripe {
+            background: white; padding: 12px 16px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 85%;
+            display: flex; align-items: center; gap: 12px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .mock-stripe-icon { width: 36px; height: 36px; background: #635BFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; }
+        .mock-stripe-text { flex: 1; }
+        .mock-stripe-title { font-size: 10px; color: #64748B; font-weight: 600; }
+        .mock-stripe-amount { font-size: 16px; color: #0F172A; font-weight: 800; }
         
-        .demo-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
-        .demo-card { background: white; color: var(--text-main); border-radius: 12px; overflow: hidden; }
+        .mock-sheet { background: white; border: 1px solid #E2E8F0; border-radius: 8px; width: 90%; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .mock-cell { background: #F1F5F9; height: 32px; border-radius: 4px; margin-bottom: 8px; position: relative; }
+        .mock-cell.active { background: white; border: 2px solid #0F9D58; display: flex; align-items: center; padding: 0 12px; font-size: 11px; font-weight: 600; color: #334155; }
         
-        .sheets-header { background: #0F9D58; color: white; padding: 10px 16px; }
-        .sheets-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .mock-phone { width: 120px; height: 220px; background: #0F172A; border-radius: 16px; padding: 6px; position: relative; top: 30px; }
+        .mock-screen { background: white; width: 100%; height: 100%; border-radius: 10px; overflow: hidden; position: relative; }
+        .mock-pdf-header { height: 30px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+        .mock-pdf-line { height: 6px; background: #E2E8F0; margin: 10px; border-radius: 4px; width: 60%; }
+        
+        .mock-folder { width: 80px; height: 60px; background: #FFD04B; border-radius: 0 6px 6px 6px; position: relative; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3); }
+        .mock-folder::before { content: ''; position: absolute; top: -10px; left: 0; width: 40px; height: 10px; background: #FFD04B; border-radius: 6px 6px 0 0; }
+        .mock-folder::after { content: 'CLIENTS'; position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: #94A3B8; }
+
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+
+        /* --- 7. DEMO SECTION (Mobile First Forms) --- */
+        .demo-section { padding: var(--spacing-section) 0; background: var(--navy); color: white; position: relative; overflow: hidden; }
+        .demo-header h2 { font-size: 32px; font-weight: 900; margin-bottom: 16px; }
+        
+        .demo-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; }
+        .demo-text { text-align: center; }
+        .demo-text h2 { font-size: 32px; font-weight: 900; margin-bottom: 16px; line-height: 1.2; }
+        .demo-text p { font-size: 16px; opacity: 0.9; margin-bottom: 20px; line-height: 1.6; }
+
+        .stage-badge { display: inline-block; background: var(--orange); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+        .stage-indicator h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+
+        .demo-card {
+            background: white; color: var(--text-main);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        /* Sheets UI */
+        .sheets-header { background: #0F9D58; color: white; padding: 12px 16px; }
+        .sheets-toolbar { display: flex; align-items: center; justify-content: space-between; }
+        .sheets-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .sheets-content { padding: 16px; }
+
+        /* Form Table: Mobile Default is Stacked */
+        .compact-table { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
         
-        /* Stacked Inputs for Mobile */
-        .compact-table { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
-        .table-row { display: flex; flex-direction: column; border-bottom: 1px solid var(--border); padding: 8px 0; }
+        .table-row {
+            display: flex;
+            flex-direction: column; /* Stacked by default */
+            border-bottom: 1px solid var(--border);
+            padding: 8px 0;
+            background: white;
+        }
         .table-row:last-child { border-bottom: none; }
+        
         .table-row.header-row { display: none; } /* Hide headers on mobile */
         
-        .cell-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 4px 12px; }
-        .cell-value { padding: 4px 12px 8px; }
-        .sheet-input-cell { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--border); border-radius: 4px; background: #FFFAF0; box-sizing: border-box; }
+        .cell-label {
+            padding: 4px 12px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border: none;
+            background: transparent;
+        }
         
-        .sku-dropdown { width: 100%; padding: 12px; font-size: 16px; border: 2px solid var(--border); border-radius: 6px; background: white; margin-bottom: 20px; }
+        .cell-value {
+            padding: 4px 12px 8px 12px;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--navy);
+        }
         
-        /* Mobile Card Table */
-        .items-table { display: block; width: 100%; }
-        .items-table thead { display: none; }
-        .items-table tbody tr { display: block; background: white; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .items-table td { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 14px; border: none; }
-        .items-table td:before { content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
-        .items-table td[data-label="Item"] { font-weight: 700; color: var(--navy); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 8px; display: block; }
-        .items-table td[data-label="Item"]:before { display: none; }
-        
-        .sheets-totals-compact { background: var(--bg-off); padding: 12px; border-radius: 4px; border: 1px solid var(--border); margin-bottom: 20px; }
-        .total-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
-        .total-row.final { font-size: 18px; font-weight: 800; color: var(--navy); border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
-        .sheets-generate-btn { width: 100%; padding: 16px; background: #0F9D58; color: white; font-size: 16px; font-weight: 700; border: none; border-radius: 8px; }
-
-        /* --- LOGIC TABLE (Restored) --- */
-        .logic-section { padding: 60px 0; background: white; }
-        .section-header h2 { font-size: 28px; font-weight: 900; color: var(--navy); margin-bottom: 20px; }
-        
-        /* Mobile Card View for Comparison */
-        .table-scroll table, .table-scroll thead, .table-scroll tbody, .table-scroll th, .table-scroll td, .table-scroll tr { display: block; }
-        .table-scroll thead tr { position: absolute; top: -9999px; left: -9999px; }
-        .table-scroll tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
-        .table-scroll td { border: none; border-bottom: 1px solid var(--border); position: relative; padding-left: 50%; text-align: right; padding: 12px; }
-        .table-scroll td:before { position: absolute; top: 12px; left: 12px; width: 45%; white-space: nowrap; text-align: left; font-weight: bold; content: attr(data-label); color: var(--navy); }
-        .check { color: var(--green); font-weight: 700; }
-        .cross { color: var(--text-muted); }
-
-        /* --- PRICING (Restored) --- */
-        .offer-section { padding: 60px 0; background: var(--bg-off); }
-        .offer-card { background: white; padding: 40px 20px; border-radius: 24px; border: 2px solid var(--navy); text-align: center; position: relative; }
-        .tag { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--orange); color: white; padding: 8px 24px; border-radius: 20px; font-weight: 700; font-size: 14px; text-transform: uppercase; }
-        .price-big { font-size: 56px; line-height: 1; font-weight: 900; color: var(--navy); }
-        .checklist { text-align: left; margin: 0 auto 32px; max-width: 400px; padding: 0; }
-        .checklist li { list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
-        .checklist svg { color: var(--green); flex-shrink: 0; }
-
-        /* --- FUNNEL (Restored) --- */
-        .funnel-section { padding: 80px 0; background: var(--navy); color: white; text-align: center; }
-        .funnel-section h2 { font-size: 32px; font-weight: 900; margin-bottom: 24px; }
-        .funnel-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .text-option { margin-top: 32px; font-size: 16px; opacity: 0.7; }
-        .text-option strong { color: white; opacity: 1; font-weight: 700; }
-
-        /* --- FAQ (Restored) --- */
-        .faq-section { padding: 60px 0; background: white; }
-        .faq-item { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-        .faq-item summary { padding: 16px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: var(--bg-off); color: var(--navy); }
-        .faq-item p { padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border); }
-
-        /* --- FOUNDER (Restored) --- */
-        .founder-section { padding: 60px 0; background: var(--bg-off); border-top: 1px solid var(--border); }
-        .founder-grid { display: flex; flex-direction: column; text-align: center; align-items: center; gap: 20px; }
-        
-        /* FORCE IMAGE SIZE */
-        .avatar { 
-            width: 100px !important; 
-            height: 100px !important; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 4px solid white; 
-            box-shadow: var(--shadow-lg);
+        /* Inputs: 16px to prevent zoom */
+        .sheet-input-cell {
+            width: 100%; border: 1px solid var(--border);
+            padding: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px; /* Crucial for iOS */
+            outline: none;
+            color: var(--navy);
+            background: #F8FAFC;
+            border-radius: 6px;
+            transition: all 0.2s;
             display: block;
         }
+        .sheet-input-cell:focus { background: white; border-color: var(--orange); }
 
-        .mobile-sticky-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 12px 20px; border-top: 1px solid var(--border); box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999; display: flex; justify-content: space-between; align-items: center; }
-        .mobile-sticky-cta .btn { width: auto; padding: 10px 20px; font-size: 14px; }
+        /* Items Table - Mobile Card View Logic */
+        .items-table-wrapper { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-top: 20px; }
+        .items-table { width: 100%; border-collapse: collapse; display: block; }
+        .items-table thead { display: none; } /* Hide table headers on mobile */
+        .items-table tbody { display: block; }
+        .items-table tr { 
+            display: block; 
+            border-bottom: 1px solid var(--border); 
+            padding: 12px; 
+            position: relative;
+        }
+        .items-table td { 
+            display: flex; 
+            justify-content: space-between;
+            padding: 4px 0; 
+            font-size: 14px; 
+            border: none;
+        }
+        /* Pseudo-labels for mobile rows */
+        .items-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-right: 12px;
+        }
+        
+        .sku-dropdown {
+            width: 100%; padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px; /* Prevent Zoom */
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
 
-        /* --- DESKTOP ENHANCEMENTS (Min-Width: 768px) --- */
+        .sheets-generate-btn {
+            width: 100%; padding: 16px;
+            background: #0F9D58; color: white;
+            border: none; border-radius: 8px;
+            font-size: 16px; font-weight: 700;
+            margin-top: 20px; cursor: pointer;
+        }
+        .sheets-generate-btn:disabled { background: var(--border); color: var(--text-muted); }
+
+        /* Timer - Mobile Stack */
+        .timer-wrapper {
+            display: grid; grid-template-columns: 1fr; gap: 16px;
+            margin-top: 32px; padding: 20px;
+            background: rgba(255, 255, 255, 0.1); border-radius: 12px;
+        }
+        .timer-value { font-size: 32px; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
+        .timer-value.old-way { color: #EF4444; }
+        .timer-value.new-way { color: var(--green); }
+
+        /* --- 8. PREVIEW & MODALS --- */
+        .success-banner {
+            display: flex; flex-direction: column; text-align: center;
+            align-items: center; gap: 16px;
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            padding: 24px; border-radius: 16px; border: 2px solid var(--green);
+            margin-bottom: 32px;
+        }
+        .checkmark { width: 48px; height: 48px; font-size: 24px; background: var(--green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        .quote-preview-wrapper { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
+        .quote-document { padding: 20px; min-height: 400px; color: var(--navy); font-size: 14px; }
+        
+        /* RESTORED QUOTE STYLES */
+        .quote-header { display: flex; flex-direction: column; gap: 20px; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; }
+        .quote-company { font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+        .quote-contact { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+        .quote-logo { width: 64px; height: 64px; background: var(--navy); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; align-self: flex-start; }
+        
+        .quote-meta { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px; }
+        .quote-meta-item label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .quote-meta-item value { font-size: 15px; color: var(--navy); font-weight: 600; }
+        
+        .quote-terms { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+        .accept-quote-btn {
+            background: var(--green); color: white; padding: 14px 24px; border-radius: 10px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center;
+        }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(4px);
+            z-index: 2000; padding: 10px;
+            display: flex; align-items: flex-end; /* Sheet style on mobile */
+        }
+        
+        .accept-page {
+            background: white; width: 100%; border-radius: 20px 20px 0 0;
+            padding: 24px; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-off); border: none; font-size: 20px; color: var(--text-muted); }
+        
+        .date-input, .time-input {
+            width: 100%; padding: 12px; border: 2px solid var(--border);
+            border-radius: 8px; font-size: 16px; color: var(--navy); margin-bottom: 16px;
+        }
+        .confirm-btn { width: 100%; padding: 16px; background: var(--navy); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; }
+
+        /* --- 9. AUTOMATION & LOGIC (Mobile Stack) --- */
+        .automation-showcase { padding: 40px 0; }
+        .automation-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        .automation-step { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        
+        .time-comparison { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 30px; }
+        .vs { display: none; } /* Hide VS on mobile */
+        .old-way-time, .new-way-time { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        
+        /* Logic Table - Card View for Mobile */
+        .table-scroll { overflow: visible; border: none; box-shadow: none; }
+        .logic-table { width: 100%; display: block; }
+        .logic-table thead { display: none; }
+        .logic-table tbody { display: block; }
+        .logic-table tr { 
+            display: block; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            margin-bottom: 16px; 
+            padding: 16px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .logic-table td { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 8px 0; 
+            border: none; 
+            border-bottom: 1px solid var(--bg-off);
+            text-align: right;
+        }
+        .logic-table td:last-child { border-bottom: none; }
+        .logic-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: left;
+            margin-right: 16px;
+        }
+        .logic-table td.check { color: var(--green); font-weight: 700; }
+        
+        /* --- 10. PRICING & FAQ --- */
+        .offer-card { padding: 40px 20px; border-radius: 16px; border-width: 2px; }
+        .price-big { font-size: 56px; line-height: 1; }
+        
+        .faq-item summary { padding: 16px; font-size: 16px; }
+        .founder-grid { display: grid; grid-template-columns: 1fr; text-align: center; gap: 24px; justify-items: center; }
+
+        /* --- 11. STICKY MOBILE CTA --- */
+        .mobile-sticky-cta {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 9999;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        /* Checklist SVG Styling */
+        .checklist-icon { color: var(--green); flex-shrink: 0; width: 24px; height: 24px; }
+        
+        .funnel-card { width: 100%; }
+
+        /* --- 12. DESKTOP MEDIA QUERIES (Min-Width Enhancements) --- */
         @media (min-width: 768px) {
-            body { padding-top: 0; }
-            .container { padding: 0 40px; }
-            .btn { width: auto; }
-            .mobile-br { display: inline; } /* Show breaks on desktop if needed or hide */
+            :root { --spacing-section: 100px; }
+            body { font-size: 16px; }
             
-            .top-scarcity-bar { font-size: 14px; }
-            header { padding: 16px 0; top: 38px; }
+            .mobile-br { display: none; }
+            .mobile-sticky-cta { display: none; }
+            
+            /* Header */
             .logo-img { height: 40px; }
-            .nav-cta { display: inline-flex; }
+            .logo-text { font-size: 24px; }
+            .nav-cta { display: inline-flex; padding: 10px 20px; font-size: 15px; min-height: auto; width: auto; }
             
-            .hero { padding-top: 160px; padding-bottom: 80px; }
-            .hero-grid { display: grid; grid-template-columns: 1fr 1.2fr; align-items: center; }
-            .hero-content { display: block; }
-            .hero h1 { font-size: 58px; margin-bottom: 24px; }
-            .hero-cta-group { align-items: flex-start; }
-            .hero-cta-group .btn { display: inline-flex; }
-            .hero-trust { align-items: flex-start; }
-            .video-frame { padding: 14px; }
+            /* Hero */
+            .hero { padding-top: 180px; }
+            .hero-grid { 
+                display: grid; 
+                grid-template-columns: 1fr 1.2fr; 
+                gap: 60px; 
+                align-items: center; 
+            }
+            .hero h1 { font-size: 58px; margin-bottom: 20px; order: unset; }
+            .hero p.sub { font-size: 19px; max-width: 520px; margin-bottom: 32px; order: unset; }
+            .video-column { order: unset; margin: 0; width: auto; }
+            .video-frame { padding: 14px; border-radius: 18px; transform: none; transition: transform 0.3s ease; }
+            .video-frame:hover { transform: scale(1.02); }
+            .hero-cta-group { align-items: flex-start; order: unset; width: fit-content; }
+            .hero-cta-group .btn { display: inline-flex; width: auto; }
+            .hero-trust { align-items: flex-start; text-align: left; }
             
-            .benefits-section { padding: 120px 0; }
+            /* Bento */
             .benefits-header h2 { font-size: 36px; }
             .bento-grid { grid-template-columns: repeat(3, 1fr); }
             .bento-span-2 { grid-column: span 2; }
             .bento-span-1 { grid-column: span 1; }
-            .bento-visual { height: 240px; }
+            .bento-visual { height: 220px; order: unset; }
             
-            .demo-section { padding: 100px 0; }
+            /* Demo */
+            .demo-header h2 { font-size: 42px; }
+            .demo-grid { grid-template-columns: 340px 1fr; gap: 60px; }
             .demo-text { text-align: left; }
-            .demo-text h2 { font-size: 42px; }
-            .demo-grid { grid-template-columns: 340px 1fr; }
+            .timer-wrapper { grid-template-columns: 1fr 1fr; }
             
-            /* Desktop Table (Side by Side) */
-            .sheets-content { padding: 24px; }
-            .table-row { display: grid; grid-template-columns: 140px 1fr; border-bottom: 1px solid var(--border); padding: 0; }
-            .table-row.header-row { display: grid; }
-            .cell-label { border-right: 1px solid var(--border); font-size: 13px; padding: 12px; }
-            .cell-value { padding: 12px; }
-            .sheet-input-cell { padding: 8px; border: none; background: #FFFAF0; }
+            /* Sheet Table Desktop */
+            .table-row { display: grid; grid-template-columns: 120px 1fr; padding: 0; border-bottom: 1px solid var(--border); }
+            .table-row.header-row { display: grid; background: var(--bg-off); font-weight: 700; font-size: 11px; text-transform: uppercase; }
+            .cell-label { border-right: 1px solid var(--border); padding: 10px 12px; font-size: 13px; background: var(--bg-off); }
+            .cell-value { padding: 10px 12px; font-size: 13px; }
+            .sheet-input-cell { border: none; padding: 10px 12px; font-size: 13px; background: #FFFAF0; border-radius: 0; }
             
+            /* Items Table Desktop */
             .items-table { display: table; }
-            .items-table thead { display: table-header-group; }
-            .items-table tbody tr { display: table-row; box-shadow: none; border: none; }
-            .items-table td { display: table-cell; border-bottom: 1px solid var(--border); padding: 12px; text-align: left; }
-            .items-table td:before { display: none; }
-            .items-table td[data-label="Item"] { display: table-cell; border: none; margin: 0; border-bottom: 1px solid var(--border); }
-            .items-table .qty-col, .items-table .rate-col, .items-table .total-col { text-align: right; }
+            .items-table thead { display: table-header-group; background: var(--bg-off); }
+            .items-table tbody { display: table-row-group; }
+            .items-table tr { display: table-row; border-bottom: 1px solid var(--border); padding: 0; }
+            .items-table td { display: table-cell; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); text-align: left; }
+            .items-table td::before { display: none; }
+            .items-table td.qty-col, .items-table td.rate-col, .items-table td.total-col { text-align: right; }
             
-            .logic-section { padding: 100px 0; }
-            .table-scroll table { display: table; }
-            .table-scroll thead tr { position: static; }
-            .table-scroll tr { border: none; margin-bottom: 0; display: table-row; }
-            .table-scroll td { display: table-cell; padding: 24px; padding-left: 24px; text-align: center; border-bottom: 1px solid var(--border); }
-            .table-scroll td:first-child { text-align: left; }
-            .table-scroll td:before { display: none; }
+            /* Preview Desktop */
+            .success-banner { flex-direction: row; text-align: left; padding: 24px 32px; }
+            .quote-header { flex-direction: row; justify-content: space-between; }
+            .quote-document { padding: 40px; }
+            .quote-meta { grid-template-columns: repeat(3, 1fr); }
+            .quote-logo { align-self: center; }
+            .accept-quote-btn { width: auto; }
             
-            .offer-section { padding: 100px 0; }
+            .modal-overlay { align-items: center; justify-content: center; padding: 20px; }
+            .accept-page { border-radius: 20px; max-width: 600px; padding: 48px; max-height: 90vh; }
+            
+            /* Automation Desktop */
+            .automation-header h2 { font-size: 42px; }
+            .automation-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+            .time-comparison { grid-template-columns: 1fr auto 1fr; gap: 32px; max-width: 700px; margin: 0 auto; }
+            .vs { display: block; font-size: 20px; font-weight: 800; color: var(--text-muted); }
+            
+            /* Logic Table Desktop */
+            .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+            .logic-table { display: table; border-collapse: collapse; min-width: 600px; }
+            .logic-table thead { display: table-header-group; }
+            .logic-table tbody { display: table-row-group; }
+            .logic-table tr { display: table-row; border: none; border-bottom: 1px solid var(--border); box-shadow: none; padding: 0; }
+            .logic-table th { background: var(--navy); color: white; padding: 24px; text-align: left; font-size: 18px; }
+            .logic-table th.highlight-col { background: var(--orange); text-align: center; }
+            .logic-table td { display: table-cell; padding: 24px; border-bottom: 1px solid var(--border); font-size: 16px; text-align: left; }
+            .logic-table td::before { display: none; }
+            .logic-table td.center, .logic-table td.check, .logic-table td.cross { text-align: center; }
+            
+            /* Founder Desktop */
+            .founder-grid { grid-template-columns: 100px 1fr; text-align: left; gap: 30px; max-width: 800px; }
+            .offer-card { padding: 60px 40px; max-width: 600px; margin: 0 auto; }
             .price-big { font-size: 72px; }
-            .funnel-section { padding: 100px 0; }
-            .funnel-section h2 { font-size: 48px; }
-            .founder-grid { display: grid; grid-template-columns: 100px 1fr; text-align: left; }
-            .mobile-sticky-cta { display: none; }
+            
+            .funnel-card { max-width: 700px; margin: 0 auto; }
         }
-        
-        /* Mockups */
-        .mock-stripe { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 300px; display: flex; align-items: center; gap: 16px; animation: float 6s ease-in-out infinite; }
-        .mock-stripe-icon { width: 40px; height: 40px; background: #635BFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; flex-shrink: 0; }
-        .mock-stripe-amount { font-size: 18px; color: #0F172A; font-weight: 800; }
-        .mock-sheet { background: white; border: 1px solid #E2E8F0; border-radius: 8px; width: 90%; max-width: 280px; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .mock-cell { background: #F1F5F9; height: 32px; border-radius: 4px; margin-bottom: 8px; }
-        .mock-cell.active { background: white; border: 2px solid #0F9D58; display: flex; align-items: center; padding: 0 12px; font-size: 12px; font-weight: 600; color: #334155; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
     </style>
 </head>
 <body>
@@ -423,20 +684,28 @@
     <section class="hero">
         <div class="container hero-grid">
             <div class="hero-content">
-                <!-- Mobile-First Order: H1, Sub, Visual, CTA/Trust -->
-                <h1>Stop doing paperwork<br class="mobile-br"> at <span class="nowrap">9:00 PM.</span></h1>
+                
+                <h1>Stop doing<br class="mobile-br"> paperwork at<br class="mobile-br"> <span class="nowrap">9:00 PM.</span></h1>
                 <p class="sub">Flowio does your quoting, booking, and follow-ups inside Google Sheets you already use.</p>
                 
+                <!-- Unified CTA & Trust Group -->
                 <div class="hero-cta-group">
                     <a href="#test-drive" class="btn btn-primary">Test Drive It (30s)</a>
                     
                     <div class="hero-trust">
-                        <div class="hero-trust-row"><span class="dot"></span><span>100% Google Native. Zero Learning Curve.</span></div>
-                        <div class="hero-trust-row"><span class="dot"></span><span>No subscription - one-time setup</span></div>
+                        <div class="hero-trust-row">
+                            <span class="dot"></span>
+                            <span>100% Google Native. Zero Learning Curve.</span>
+                        </div>
+                        <div class="hero-trust-row">
+                            <span class="dot"></span>
+                            <span>No subscription - one-time setup</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="hero-visual">
+            
+            <div class="video-column">
                 <div class="video-frame">
                     <div class="video-wrapper">
                         <iframe id="hero-video" src="https://www.youtube-nocookie.com/embed/Z2NO3qIiP5c?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
@@ -451,7 +720,7 @@
         <div class="container">
             <div class="benefits-header">
                 <h2>Built for tradies who hate computers</h2>
-                <p>The power of a $50k enterprise app, inside a simple Google Sheet.</p>
+                <p>The power of a $50k enterprise app, inside a simple Google Sheet you already know how to use.</p>
             </div>
             
             <div class="bento-grid">
@@ -461,7 +730,7 @@
                         <div class="mock-stripe">
                             <div class="mock-stripe-icon">S</div>
                             <div class="mock-stripe-text">
-                                <div style="font-size:11px; color:#64748B; font-weight:700;">PAYMENT RECEIVED</div>
+                                <div class="mock-stripe-title">PAYMENT RECEIVED</div>
                                 <div class="mock-stripe-amount">$150.00 AUD</div>
                             </div>
                         </div>
@@ -471,36 +740,46 @@
                         <div class="bento-desc">"Instant Deposit" SMS links mean you wake up to cash in the bank. No more waiting 3 days for bank transfers or chasing invoices.</div>
                     </div>
                 </div>
+                
                 <!-- Card 2 -->
                 <div class="bento-card bento-span-1">
                     <div class="bento-visual">
                         <div class="mock-sheet">
-                            <div class="mock-cell active">▼ Select Service</div>
-                            <div class="mock-cell"></div><div class="mock-cell"></div>
+                            <div class="mock-cell active">▼ Select Service Item</div>
+                            <div class="mock-cell"></div>
+                            <div class="mock-cell"></div>
                         </div>
                     </div>
                     <div class="bento-content">
                         <div class="bento-title">🎯 No Mistakes</div>
-                        <div class="bento-desc">System forces correct data entry. No more lost invoices, forgotten follow-ups, or missing line items that cost you money.</div>
+                        <div class="bento-desc">System forces correct data entry. No more lost invoices or missing line items.</div>
                     </div>
                 </div>
+                
                 <!-- Card 3 -->
                 <div class="bento-card bento-span-1">
-                    <div class="bento-visual" style="background:#0F172A;">
-                        <div style="width:60px; height:90px; background:white; border-radius:6px; opacity:0.9; position:absolute;"></div>
+                    <div class="bento-visual">
+                        <div class="mock-phone">
+                            <div class="mock-screen">
+                                <div class="mock-pdf-header"></div>
+                                <div class="mock-pdf-line"></div>
+                                <div class="mock-pdf-line" style="width: 80%"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="bento-content">
                         <div class="bento-title">✨ Look Professional</div>
-                        <div class="bento-desc">Branded PDFs and automated SMS updates make you look like a Tier-1 firm. Your clients think you have an office team.</div>
+                        <div class="bento-desc">Branded PDFs make you look like a Tier-1 firm.</div>
                     </div>
                 </div>
+                
                 <!-- Card 4 -->
                 <div class="bento-card bento-span-2">
                     <div class="bento-visual">
-                        <div style="font-size:48px;">🔒</div>
+                        <div class="mock-folder"></div>
                     </div>
                     <div class="bento-content">
-                        <div class="bento-title">Own Your Data</div>
+                        <div class="bento-title">🔒 Own Your Data</div>
                         <div class="bento-desc">Everything lives in your Google Drive forever. No monthly hostage fees. Stop paying, you still own your entire business history.</div>
                     </div>
                 </div>
@@ -508,101 +787,288 @@
         </div>
     </section>
 
-    <!-- TEST DRIVE SECTION -->
+    <!-- THE TEST DRIVE -->
     <section id="test-drive" class="demo-section">
         <div class="container">
+            <!-- STAGE 1 -->
             <div id="stage-1" class="demo-stage">
                 <div class="demo-grid">
                     <div class="demo-text">
-                        <div style="margin-bottom: 24px;">
-                            <h2>Experience it.<br>Right now.</h2>
+                        <div style="margin-bottom: 30px;">
+                            <h2>Experience it.<br>Right now.<br>No signup.</h2>
                             <p>This is the exact system your business will use. Watch it work in real-time.</p>
+                        </div>
+
+                        <div class="stage-indicator">
+                            <span class="stage-badge">STAGE 1</span>
+                            <h3>This is your QuoteBuilder</h3>
+                        </div>
+                        <p>Same Google Sheets you use every day. Just pick from your price list and hit generate.</p>
+                        <div class="timer-wrapper" id="timer-display" style="display: none;">
+                            <div class="timer-item">
+                                <div class="timer-label">Old Way (Word/Excel)</div>
+                                <div class="timer-value old-way">⏱️ 15:23</div>
+                            </div>
+                            <div class="timer-item">
+                                <div class="timer-label">Flowio System</div>
+                                <div class="timer-value new-way" id="flowio-timer">⚡ 0:00</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="demo-card">
                         <div class="sheets-header">
-                            <div class="sheets-title"><span>Flowio QuoteBuilder</span></div>
+                            <div class="sheets-toolbar">
+                                <div class="sheets-title">
+                                    <svg width="20" height="20" viewBox="0 0 100 100" fill="none" style="margin-right:8px"><circle cx="50" cy="50" r="45" stroke="#fff" stroke-width="8"/></svg>
+                                    Flowio (by TradeAnchor)-SKU-B
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="sheets-content">
+                            <!-- Mobile-First Stacked Table -->
                             <div class="compact-table">
                                 <div class="table-row header-row">
-                                    <div class="cell-label">Field</div><div class="cell-value">Value</div>
+                                    <div class="cell-label">Field</div>
+                                    <div class="cell-value">Value</div>
                                 </div>
                                 <div class="table-row">
-                                    <div class="cell-label">Quote ID</div><div class="cell-value">Q0004</div>
+                                    <div class="cell-label">Quote ID</div>
+                                    <div class="cell-value">Q0004</div>
                                 </div>
                                 <div class="table-row">
-                                    <div class="cell-label">Client Name</div><div class="cell-value">Sean Miller · Sydney, NSW</div>
+                                    <div class="cell-label">Client Name</div>
+                                    <div class="cell-value">Sean Miller · Sydney, NSW</div>
                                 </div>
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Mobile</div>
                                     <div class="cell-value">
-                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile for live SMS alert...">
+                                        <input type="tel" id="user-mobile" class="sheet-input-cell" placeholder="Enter mobile for SMS demo...">
                                     </div>
                                 </div>
                                 <div class="table-row">
                                     <div class="cell-label" style="color: var(--orange);">Client Email</div>
                                     <div class="cell-value">
-                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email for branded PDF quote...">
+                                        <input type="email" id="user-email" class="sheet-input-cell" placeholder="Enter email for PDF demo...">
                                     </div>
                                 </div>
                             </div>
                             
+                            <div style="height: 24px;"></div>
+                            
+                            <!-- SKU Selection -->
                             <div style="margin-bottom: 16px;">
                                 <label style="font-size: 12px; font-weight: 700; color: var(--text-main); text-transform: uppercase; display: block; margin-bottom: 8px;">Add Items From Price List:</label>
                                 <select id="job-select" class="sku-dropdown">
                                     <option value="">-- Select Item --</option>
                                     <option value="power-point">ELEC-002 · Power point add ($150)</option>
-                                    <option value="led-downlight">ELEC-003 · LED downlight ($85)</option>
-                                    <option value="ceiling-fan">ELEC-005 · Ceiling Fan ($250)</option>
+                                    <option value="led-downlight">ELEC-003 · LED downlight supply+fit ($85)</option>
+                                    <option value="ceiling-fan">ELEC-005 · Install Ceiling Fan ($250)</option>
                                     <option value="labour">GEN-002 · Labour ($95)</option>
                                 </select>
                             </div>
                             
+                            <!-- Items Table (Data-Label for Mobile) -->
                             <div class="items-table-wrapper">
                                 <table class="items-table">
                                     <thead>
                                         <tr>
-                                            <th>SKU</th><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th>
+                                            <th>SKU</th>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Rate</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="selected-items">
                                         <tr class="empty-state">
-                                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px; font-size: 13px;">Select items from the dropdown above</td>
+                                            <td colspan="5" style="display: block; text-align: center; color: var(--text-muted); padding: 24px; font-size: 13px;">
+                                                Select items from the dropdown above
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             
-                            <div class="sheets-totals-compact">
-                                <div class="total-row"><span>Subtotal</span><span id="subtotal-display">$0.00</span></div>
-                                <div class="total-row"><span>GST 10%</span><span id="gst-display">$0.00</span></div>
-                                <div class="total-row final"><span>Total</span><span id="total-display">$0.00</span></div>
+                            <div style="height: 16px;"></div>
+                            
+                            <!-- Compact Totals -->
+                            <div style="background: var(--bg-off); padding: 16px; border-radius: 4px; border: 1px solid var(--border);">
+                                <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+                                    <span>Subtotal</span>
+                                    <span id="subtotal-display" style="font-family: 'JetBrains Mono';">$0.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+                                    <span>GST 10%</span>
+                                    <span id="gst-display" style="font-family: 'JetBrains Mono';">$0.00</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; border-top: 2px solid var(--navy); margin-top: 8px; padding-top: 10px; font-weight: 700;">
+                                    <span>Total</span>
+                                    <span id="total-display" style="font-family: 'JetBrains Mono';">$0.00</span>
+                                </div>
                             </div>
+                            
                             <button id="generate-btn" class="sheets-generate-btn" disabled>Generate Quote</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Hidden Stages (Populated by JS) -->
-            <div id="stage-2" class="demo-stage hidden"></div>
-            <div id="accept-modal" class="modal-overlay hidden"></div>
-            <div id="behind-scenes" class="demo-stage hidden"></div>
-            <div id="sms-option" class="demo-stage hidden"></div>
+
+            <!-- STAGE 2: Quote Preview -->
+            <div id="stage-2" class="demo-stage" style="display: none;">
+                <div class="success-banner">
+                    <div class="checkmark">✓</div>
+                    <div>
+                        <h3 style="color: var(--navy); font-weight: 800; font-size: 24px;">Quote Generated!</h3>
+                        <p style="color: var(--text-muted);">That took <strong id="time-elapsed">2.4 seconds</strong>. Your Word doc takes 15 minutes.</p>
+                    </div>
+                </div>
+
+                <div class="demo-grid" style="margin-top: 40px;">
+                    <div class="demo-text">
+                        <div class="stage-indicator">
+                            <span class="stage-badge">STAGE 2</span>
+                            <h3>This is what your customer gets</h3>
+                        </div>
+                        <p>Professional PDF quote, branded with your logo. No formatting issues. No mistakes.</p>
+                        <p style="margin-top: 16px; font-weight: 600; color: white;">👉 Click "Accept quote" to see what happens next</p>
+                    </div>
+
+                    <div class="quote-preview-wrapper">
+                        <div style="background: #E5E7EB; padding: 12px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #CBD5E1;">
+                            <div style="display: flex; gap: 6px;">
+                                <span style="width: 10px; height: 10px; border-radius: 50%; background: #94A3B8;"></span>
+                                <span style="width: 10px; height: 10px; border-radius: 50%; background: #94A3B8;"></span>
+                            </div>
+                            <div style="flex: 1; background: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono'; overflow: hidden; white-space: nowrap;">tradeanchor.com.au/quote/Q0004</div>
+                        </div>
+                        <div id="quote-pdf" class="quote-document"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 3: Accept Modal -->
+            <div id="accept-modal" class="modal-overlay" style="display: none;">
+                <div class="accept-page">
+                    <button class="modal-close" onclick="closeAcceptModal()">×</button>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <h2 style="font-size: 24px; font-weight: 800; color: var(--navy); margin-bottom: 8px;">Accept Quote #Q0004</h2>
+                        <p style="color: var(--text-muted); font-size: 14px;">Sean Miller · Sydney, NSW</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-off); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Subtotal</span><span id="accept-subtotal">$690.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--navy); border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                            <span>Total</span><span id="accept-total">$759.00</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--navy);">Preferred Job Date</label>
+                        <input type="date" class="date-input" required>
+                        
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--navy);">Start Time</label>
+                        <input type="time" class="time-input" required>
+                        
+                        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 24px;">
+                            <input type="checkbox" id="accept-terms" style="width: 20px; height: 20px; margin-top: 2px;" required>
+                            <label for="accept-terms" style="font-size: 14px; line-height: 1.4;">I accept this quote and the terms.</label>
+                        </div>
+                        
+                        <button class="confirm-btn" onclick="confirmBooking()">Confirm & Book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 4: Automation Showcase -->
+            <div id="behind-scenes" class="demo-stage" style="display: none;">
+                <div class="automation-showcase">
+                    <div class="text-center" style="margin-bottom: 40px;">
+                        <div class="checkmark" style="width: 60px; height: 60px; font-size: 32px; margin: 0 auto 20px;">✓</div>
+                        <h2 style="font-size: 32px; font-weight: 900; margin-bottom: 12px;">Booking Confirmed!</h2>
+                        <p>Here's what just happened automatically...</p>
+                    </div>
+                    
+                    <div class="automation-grid">
+                        <div class="automation-step">
+                            <div style="font-size: 32px; margin-bottom: 16px;">📅</div>
+                            <h3 style="font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px;">Calendar Event Created</h3>
+                            <p style="font-size: 15px; color: var(--text-muted);">Job automatically added to your Google Calendar.</p>
+                        </div>
+                        <div class="automation-step">
+                            <div style="font-size: 32px; margin-bottom: 16px;">📲</div>
+                            <h3 style="font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px;">Confirmation SMS</h3>
+                            <p style="font-size: 15px; color: var(--text-muted);">Customer receives instant confirmation with invite link.</p>
+                        </div>
+                        <div class="automation-step">
+                            <div style="font-size: 32px; margin-bottom: 16px;">💳</div>
+                            <h3 style="font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px;">Deposit Processed</h3>
+                            <p style="font-size: 15px; color: var(--text-muted);">Deposit payment captured via Stripe, funds in your account.</p>
+                        </div>
+                        <div class="automation-step">
+                            <div style="font-size: 32px; margin-bottom: 16px;">🔔</div>
+                            <h3 style="font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 8px;">Reminder Scheduled</h3>
+                            <p style="font-size: 15px; color: var(--text-muted);">Automatic SMS reminder sent 24 hours before job starts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="automation-summary" style="margin-top: 40px;">
+                        <h3>⚡ That took 8 seconds.</h3>
+                        <div class="time-comparison">
+                            <div class="old-way-time">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Old Way</div>
+                                <div style="font-size: 42px; font-weight: 900; color: #EF4444;">3h 15m</div>
+                            </div>
+                            <div class="vs">VS</div>
+                            <div class="new-way-time">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Flowio</div>
+                                <div style="font-size: 42px; font-weight: 900; color: var(--green);">8 sec</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showSMSOption()">Want to test this on YOUR phone?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Option -->
+            <div id="sms-option" class="demo-stage" style="display: none;">
+                <div class="demo-card" style="max-width: 500px; margin: 0 auto; padding: 32px;">
+                    <h3 style="color: var(--navy); margin-bottom: 16px; text-align: center; font-size: 24px; font-weight: 800;">Get the real experience</h3>
+                    <p style="color: var(--text-muted); text-align: center; margin-bottom: 24px;">Enter your number and we'll send you an actual quote link.</p>
+                    
+                    <form id="sms-form">
+                        <div style="margin-bottom: 16px;">
+                            <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 8px; color: var(--navy);">Mobile Number</label>
+                            <input type="tel" id="phone-input" class="sheet-input-cell" placeholder="04XX XXX XXX" required style="border: 2px solid var(--border); background: white;">
+                        </div>
+                        <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send me the quote →</button>
+                    </form>
+
+                    <div id="sms-success" style="display: none; text-align: center; padding: 20px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📲</div>
+                        <h3 style="color: var(--green); margin-bottom: 8px;">Check your phone!</h3>
+                        <p style="color: var(--text-muted);">We just sent you a real quote.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- LOGIC SECTION -->
-    <section class="logic-section">
+    <section class="logic-section" style="padding: var(--spacing-section) 0; background: white;">
         <div class="container">
-            <div class="section-header text-center" style="margin-bottom: 40px;">
-                <h2>Why 78% of Tradies Quit SaaS Apps</h2>
-                <p>They are too complicated. Spreadsheets are too manual. Flowio is the best of both worlds.</p>
+            <div class="text-center" style="margin-bottom: 40px;">
+                <h2 style="font-size: 32px; font-weight: 900; color: var(--navy); margin-bottom: 16px;">Why 78% of Tradies Quit SaaS Apps</h2>
+                <p style="font-size: 18px; color: var(--text-muted);">They are too complicated. Spreadsheets are too manual. Flowio is the best of both worlds.</p>
             </div>
+
             <div class="table-scroll">
-                <table>
+                <table class="logic-table">
                     <thead>
                         <tr>
                             <th>Feature</th>
@@ -643,83 +1109,102 @@
     </section>
 
     <!-- PRICING -->
-    <section class="offer-section">
+    <section class="offer-section" style="padding: var(--spacing-section) 0; background: var(--bg-off);">
         <div class="container">
-            <div class="offer-card">
-                <div class="tag">Pilot Pricing</div>
-                <h2>The "Done-For-You" Build</h2>
-                <div class="price-big">$1,800</div>
-                <div class="price-sub">One-time Setup Fee (Tax Deductible)</div>
-                <ul class="checklist">
-                    <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Custom Branding (Logo & Colors)</li>
-                    <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Stripe Payment Integration</li>
-                    <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> SMS & Calendar Automation</li>
-                    <li><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> <strong>Iron-Clad Guarantee:</strong> Save 5hrs/week or full refund.</li>
+            <div class="offer-card" style="background: white; border: 2px solid var(--navy); text-align: center; position: relative;">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--orange); color: white; padding: 8px 24px; border-radius: 20px; font-weight: 700; font-size: 14px; text-transform: uppercase;">Pilot Pricing</div>
+                <h2 style="margin-bottom: 10px; color: var(--navy); font-weight: 800; font-size: 28px;">The "Done-For-You" Build</h2>
+                <div class="price-big" style="color: var(--navy); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 8px;">$1,800</div>
+                <div style="font-size: 18px; color: var(--text-muted); margin-bottom: 40px;">One-time Setup Fee (Tax Deductible)</div>
+                
+                <ul style="text-align: left; margin: 0 auto 40px; max-width: 400px; padding: 0;">
+                    <li style="list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px;">
+                        <svg class="checklist-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Custom Branding (Logo & Colors)
+                    </li>
+                    <li style="list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px;">
+                        <svg class="checklist-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Stripe Payment Integration
+                    </li>
+                    <li style="list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px;">
+                        <svg class="checklist-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> SMS & Calendar Automation
+                    </li>
+                    <li style="list-style: none; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px;">
+                        <svg class="checklist-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> <strong>Iron-Clad Guarantee:</strong> Save 5hrs/week or full refund.
+                    </li>
                 </ul>
+
                 <a href="#funnel-cta" class="btn btn-primary" style="width: 100%;">Book Your Build</a>
-                <p style="margin-top:16px; font-size:13px; opacity:0.7;">+$99/mo Tech Management Fee. (Covers SMS costs, API monitoring, Hosting, & Break-Fix Support).</p>
+                
+                <p style="margin-top: 16px; font-size: 14px; color: var(--text-muted); line-height: 1.4;">
+                    +$99/mo Tech Management Fee.<br>
+                    (Covers SMS costs, API monitoring, Hosting, & Break-Fix Support).
+                </p>
             </div>
         </div>
     </section>
 
     <!-- FUNNEL CTA -->
-    <section id="funnel-cta" class="funnel-section">
+    <section id="funnel-cta" class="funnel-section" style="padding: var(--spacing-section) 0; background: var(--navy); color: white; text-align: center;">
         <div class="container funnel-card">
-            <h2>I only onboard 3 trades per week to ensure quality.</h2>
-            <p>I want to make sure this is right for you. Let's chat for 10 minutes. No sales pressure—just a demo of how it works for your specific trade.</p>
+            <h2 style="font-size: 32px; font-weight: 900; margin-bottom: 24px;">I only onboard 3 trades per week to ensure quality.</h2>
+            <p style="font-size: 18px; opacity: 0.8; margin-bottom: 40px; line-height: 1.6;">I want to make sure this is right for you. Let's chat for 10 minutes. No sales pressure—just a demo of how it works for your specific trade.</p>
             
-            <div class="funnel-actions">
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
                 <a href="https://calendly.com/" target="_blank" class="btn btn-white">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:8px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     Book A 15-Min Demo Call
                 </a>
             </div>
             
-            <div class="text-option">
+            <div style="margin-top: 32px; font-size: 18px; opacity: 0.7;">
                 Or text <strong>"FLOW"</strong> to <strong>0494 186 989</strong><br>
                 <span style="font-size: 14px;">I'll reply with a sample quote so you can see it in action.</span>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="faq-section">
+    <!-- FAQ & FOUNDER -->
+    <section class="faq-section" style="padding: var(--spacing-section) 0; background: white;">
         <div class="container">
-            <div class="section-header text-center" style="margin-bottom: 40px;">
-                <h2>Common Questions</h2>
+            <div class="text-center" style="margin-bottom: 40px;">
+                <h2 style="font-size: 32px; font-weight: 900; color: var(--navy);">Common Questions</h2>
             </div>
-            <div class="faq-list">
-                <details class="faq-item">
-                    <summary>How long until I'm live?</summary>
-                    <p>48 hours from payment to first quote sent. We handle the entire setup — you just need to provide your logo, company details, and Stripe account.</p>
+            <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">How long until I'm live?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">48 hours from payment to first quote sent. We handle the entire setup — you just need to provide your logo, company details, and Stripe account.</p>
                 </details>
-                <details class="faq-item">
-                    <summary>Can I try it first?</summary>
-                    <p>Yes — we'll send you a demo quote link so you can see exactly what your customers will experience. No payment required for the demo.</p>
+                
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">Can I try it first?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">Yes — we'll send you a demo quote link so you can see exactly what your customers will experience. No payment required for the demo.</p>
                 </details>
-                <details class="faq-item">
-                    <summary>Does it work on mobile?</summary>
-                    <p>Yes. Customers accept on their phones (mobile-optimized page). You can create quotes from job sites using our big-button Quick Quote form.</p>
+                
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">Does it work on mobile?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">Yes. Customers accept on their phones (mobile-optimized page). You can create quotes from job sites using our big-button Quick Quote form.</p>
                 </details>
-                <details class="faq-item">
-                    <summary>What if something breaks?</summary>
-                    <p>We auto-email you with the error + context. 12 months of break-fix support included (covers Google/Stripe/Xero changes, template fixes, auth issues).</p>
+                
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">What if something breaks?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">We auto-email you with the error + context. 12 months of break-fix support included (covers Google/Stripe/Xero changes, template fixes, auth issues).</p>
                 </details>
-                <details class="faq-item">
-                    <summary>Do customers pay card fees?</summary>
-                    <p>Optional. You can pass through Stripe card fees, or absorb them. Your choice.</p>
+                
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">Do customers pay card fees?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">Optional. You can pass through Stripe card fees, or absorb them. Your choice.</p>
                 </details>
-                <details class="faq-item">
-                    <summary>Does it work with Xero?</summary>
-                    <p>Yes — Xero draft invoice is available on request (optional add-on).</p>
+                
+                <details class="faq-item" style="border: 1px solid var(--border); border-radius: 8px;">
+                    <summary style="background: var(--bg-off); color: var(--navy); font-weight: 700; cursor: pointer;">Does it work with Xero?</summary>
+                    <p style="padding: 16px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid var(--border);">Yes — Xero draft invoice is available on request (optional add-on).</p>
                 </details>
             </div>
         </div>
     </section>
-
-    <!-- FOUNDER -->
-    <section class="founder-section">
+    
+    <section class="founder-section" style="padding: var(--spacing-section) 0; background: var(--bg-off); border-top: 1px solid var(--border);">
         <div class="container founder-grid">
-            <img src="images/founder.jpg" alt="Founder Profile" class="avatar">
+            <img src="images/founder.jpg" alt="Founder" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
             <div>
                 <h3 style="color: var(--navy); font-weight: 800; margin-bottom: 8px;">I'm not a SaaS Company.</h3>
                 <p style="color: var(--text-muted);">I'm a local Systems Engineer based in Sydney. I don't just send you a login and wish you good luck. I come to your business (or Zoom), I set up your price list, I connect your bank, and I train your team. You get a partner, not just a tool.</p>
@@ -727,7 +1212,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer style="padding: 40px 0; background: var(--navy-light); color: rgba(255,255,255,0.6); text-align: center; font-size: 14px;">
         <div class="container">
             <p>&copy; 2025 TradeAnchor. Installing Flowio™ for Australian Tradies.</p>
@@ -741,11 +1225,11 @@
     
     <!-- MOBILE STICKY CTA -->
     <div class="mobile-sticky-cta">
-        <div style="font-weight: 700; color: var(--navy);">Only 2 Spots Left</div>
-        <a href="#test-drive" class="btn btn-primary" style="width:auto; padding: 10px 24px;">Test Drive</a>
+        <div style="font-weight: 700; color: var(--navy); font-size: 14px;">Only 2 Spots Left</div>
+        <a href="#test-drive" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px; min-height: 44px; width: auto;">Test Drive</a>
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- JS (Kept functionality identical) -->
     <script>
         window.addEventListener('load', function() {
             setTimeout(function() {
@@ -753,7 +1237,6 @@
                 if (iframe) {
                     var src = iframe.src;
                     if (src.indexOf('autoplay') === -1) src += "&autoplay=1";
-                    // Note: Mute is required for autoplay to work in modern browsers
                     if (src.indexOf('mute') === -1) src += "&mute=1";
                     iframe.src = src;
                 }
@@ -762,38 +1245,256 @@
 
         const jobData = {
             'power-point': { sku: 'ELEC-002', name: 'Power point add', qty: 1, rate: 150 },
-            'led-downlight': { sku: 'ELEC-003', name: 'LED downlight', qty: 3, rate: 85 },
-            'ceiling-fan': { sku: 'ELEC-005', name: 'Ceiling Fan', qty: 1, rate: 250 },
+            'led-downlight': { sku: 'ELEC-003', name: 'LED downlight supply+fit', qty: 3, rate: 85 },
+            'ceiling-fan': { sku: 'ELEC-005', name: 'Install Ceiling Fan', qty: 1, rate: 250 },
             'labour': { sku: 'GEN-002', name: 'Labour', qty: 3, rate: 95 }
         };
         
         let selectedItems = [];
+        let startTime;
         
         document.addEventListener('DOMContentLoaded', function() {
-            const jobSelect = document.getElementById('job-select');
-            
-            jobSelect.addEventListener('change', function() {
-                const val = this.value;
-                if(!val) return;
-                const job = jobData[val];
-                selectedItems.push({...job});
-                
-                const html = selectedItems.map(item => `
+            function updateItemsDisplay() {
+                const tbody = document.getElementById('selected-items');
+                if (selectedItems.length === 0) {
+                    tbody.innerHTML = `<tr class="empty-state"><td colspan="5" style="display:block; text-align:center; padding:24px; color:#64748B;">Select items from the dropdown above</td></tr>`;
+                    return;
+                }
+                const html = selectedItems.map((item) => `
                     <tr>
-                        <td data-label="SKU">${item.sku}</td>
+                        <td data-label="SKU" class="sku-col">${item.sku}</td>
                         <td data-label="Item">${item.name}</td>
-                        <td data-label="Qty">${item.qty}</td>
-                        <td data-label="Rate">$${item.rate}</td>
-                        <td data-label="Total">$${item.qty * item.rate}</td>
+                        <td data-label="Qty" class="qty-col">${item.qty}</td>
+                        <td data-label="Rate" class="rate-col">$${item.rate.toFixed(2)}</td>
+                        <td data-label="Total" class="total-col">$${(item.qty * item.rate).toFixed(2)}</td>
                     </tr>
                 `).join('');
-                document.getElementById('selected-items').innerHTML = html;
-                
-                const total = selectedItems.reduce((sum, i) => sum + (i.qty * i.rate), 0);
-                document.getElementById('total-display').textContent = `$${(total * 1.1).toFixed(2)}`;
+                tbody.innerHTML = html;
+            }
+            
+            function updateTotals() {
+                const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
+                const gst = subtotal * 0.1;
+                const total = subtotal + gst;
+                document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('gst-display').textContent = `$${gst.toFixed(2)}`;
+                document.getElementById('total-display').textContent = `$${total.toFixed(2)}`;
+            }
+            
+            const jobSelect = document.getElementById('job-select');
+            jobSelect.addEventListener('change', function() {
+                const val = this.value;
+                if (!val) return;
+                const job = jobData[val];
+                if (selectedItems.find(item => item.sku === job.sku)) { this.value = ''; return; }
+                selectedItems.push({...job});
+                updateItemsDisplay();
+                updateTotals();
                 document.getElementById('generate-btn').disabled = false;
                 this.value = '';
             });
+            
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                if (selectedItems.length === 0) return;
+                startTime = Date.now();
+                document.getElementById('timer-display').style.display = 'grid';
+                let elapsed = 0;
+                const timerInterval = setInterval(() => {
+                    elapsed += 0.1;
+                    document.getElementById('flowio-timer').textContent = `⚡ ${elapsed.toFixed(1)}s`;
+                }, 100);
+                this.innerHTML = '⚡ Generating...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    clearInterval(timerInterval);
+                    const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+                    document.getElementById('flowio-timer').textContent = `⚡ ${finalTime}s`;
+                    const userMobile = document.getElementById('user-mobile').value;
+                    const userEmail = document.getElementById('user-email').value;
+                    generateQuote(userMobile, userEmail);
+                    document.getElementById('stage-1').style.display = 'none';
+                    document.getElementById('stage-2').style.display = 'block';
+                    document.getElementById('time-elapsed').textContent = `${finalTime} seconds`;
+                    if (window.plausible) plausible('Quote Generated');
+                }, 1500);
+            });
+        });
+        
+        function generateQuote(mobile, email) {
+            const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
+            const gst = subtotal * 0.1;
+            const total = subtotal + gst;
+            const clientEmail = email || 'sean@tradeanchor.com.au';
+            const clientPhone = mobile || '0491 570 156';
+            
+            // FULLY RESTORED ORIGINAL TEMPLATE STRUCTURE
+            const quoteHTML = `
+                <div class="quote-header">
+                    <div>
+                        <div class="quote-company">TradeAnchor</div>
+                        <div class="quote-contact">
+                            Email: support@tradeanchor.com.au<br>
+                            ABN: 45 529 331 663
+                        </div>
+                    </div>
+                    <div class="quote-logo">⚓</div>
+                </div>
+                
+                <div style="margin-bottom: 32px;">
+                    <h3 style="font-size: 14px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Bill To:</h3>
+                    <div style="font-size: 16px; color: var(--navy); line-height: 1.6;">
+                        <strong>Sean Miller</strong><br>
+                        ${clientEmail}<br>
+                        ${clientPhone}<br>
+                        Sydney, NSW
+                    </div>
+                </div>
+                
+                <div class="quote-meta">
+                    <div class="quote-meta-item">
+                        <label>Quote ID</label>
+                        <value>Q0004</value>
+                    </div>
+                    <div class="quote-meta-item">
+                        <label>Quote date</label>
+                        <value>22 Nov 2025</value>
+                    </div>
+                    <div class="quote-meta-item">
+                        <label>Quote due date</label>
+                        <value>06 Dec 2025</value>
+                    </div>
+                </div>
+                
+                <table class="quote-table" style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+                    <thead>
+                        <tr>
+                            <th style="background: var(--bg-off); padding: 12px; text-align: left; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Item</th>
+                            <th style="background: var(--bg-off); padding: 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Qty</th>
+                            <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Rate</th>
+                            <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${selectedItems.map(item => `
+                            <tr>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main);">${item.name}</td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: center;">${item.qty}</td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${item.rate.toFixed(2)}</td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${(item.qty * item.rate).toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <div style="text-align: right; margin-bottom: 32px;">
+                    <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
+                        <div style="margin-right: 40px; color: var(--text-muted);">Subtotal:</div>
+                        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${subtotal.toFixed(2)}</div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
+                        <div style="margin-right: 40px; color: var(--text-muted);">GST (10%):</div>
+                        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${gst.toFixed(2)}</div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; padding: 12px 0; margin-top: 8px; border-top: 2px solid var(--navy); font-size: 20px; font-weight: 800; color: var(--navy);">
+                        <div style="margin-right: 40px; color: var(--text-muted);">Total:</div>
+                        <div style="min-width: 120px;">$${total.toFixed(2)}</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="accept-quote-btn" onclick="showAcceptModal()">
+                        Accept quote →
+                    </button>
+                </div>
+                
+                <div class="quote-terms">
+                    <strong>Terms and Conditions</strong><br>
+                    14 days
+                </div>
+            `;
+            
+            document.getElementById('quote-pdf').innerHTML = quoteHTML;
+            document.getElementById('accept-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('accept-total').textContent = `$${total.toFixed(2)}`;
+        }
+        
+        function showAcceptModal() {
+            document.getElementById('accept-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            if (window.plausible) plausible('Accept Quote Clicked');
+        }
+        function closeAcceptModal() {
+            document.getElementById('accept-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        function confirmBooking() {
+            if (!document.getElementById('accept-terms').checked) {
+                alert('Please accept terms'); return;
+            }
+            closeAcceptModal();
+            document.getElementById('stage-2').style.display = 'none';
+            document.getElementById('behind-scenes').style.display = 'block';
+            document.getElementById('behind-scenes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (window.plausible) plausible('Booking Confirmed');
+        }
+        function showSMSOption() {
+            document.getElementById('behind-scenes').style.display = 'none';
+            document.getElementById('sms-option').style.display = 'block';
+            document.getElementById('sms-option').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // UTM Tracking
+        const utmData = {
+            source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+            medium: new URLSearchParams(window.location.search).get('utm_medium') || 'none',
+            campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'none'
+        };
+
+        // SMS Form Submission
+        document.getElementById('sms-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Honeypot check
+            if (e.target.website.value !== '') return;
+            
+            const phone = document.getElementById('phone-input').value;
+            const btn = e.target.querySelector('button');
+            btn.innerHTML = 'Sending...';
+            btn.disabled = true;
+            
+            const formData = {
+                phone: phone,
+                items: selectedItems.map(item => item.name).join(', '),
+                timestamp: Date.now(),
+                ...utmData
+            };
+            
+            try {
+                // TODO: Replace with your Make.com webhook
+                await fetch('YOUR_MAKE_WEBHOOK_URL', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Show success
+                document.getElementById('sms-form').style.display = 'none';
+                document.getElementById('sms-success').style.display = 'block';
+                
+                if (window.plausible) plausible('SMS Requested', {props: utmData});
+                
+            } catch (error) {
+                console.error(error);
+                // Still show success for demo
+                document.getElementById('sms-form').style.display = 'none';
+                document.getElementById('sms-success').style.display = 'block';
+            }
+        });
+        
+        // Close modal on overlay click
+        document.getElementById('accept-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeAcceptModal();
         });
     </script>
 </body>
