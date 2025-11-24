@@ -1564,16 +1564,22 @@
             btn.innerHTML = 'Sending...';
             btn.disabled = true;
             
-            const formData = {
-                phone: phone,
-                items: selectedItems.map(item => item.name).join(', '),
-                timestamp: Date.now(),
-                ...utmData
-            };
+const formData = {
+    phone: phone,
+    email: document.getElementById('user-email').value || '',
+    name: 'Demo Lead', // or capture a name field later
+    items: selectedItems,
+    subtotal,
+    gst,
+    total,
+    utm: utmData,
+    timestamp: new Date().toISOString()
+};
+
             
             try {
                 // TODO: Replace with your Make.com webhook
-                await fetch('YOUR_MAKE_WEBHOOK_URL', {
+                await fetch('https://hook.us2.make.com/iowm5ja7jqtluqu6geuxu39ski3g9u2j', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
