@@ -43,6 +43,7 @@
             line-height: 1.6;
             overflow-x: hidden;
             padding-top: 40px; /* Space for scarcity bar */
+            padding-bottom: 90px; /* Space so footer terms sit above sticky CTA on mobile */
             font-size: 16px; /* Base size for mobile readability */
         }
 
@@ -198,8 +199,8 @@
         /* 2. Headline below video */
         .hero h1 {
             font-size: 42px;
-            line-height: 1.1;
-            font-weight: 900;
+            line-height: 1.3;
+            font-weight: 1000;
             color: var(--navy);
             letter-spacing: -0.03em;
             margin-bottom: 16px;
@@ -516,38 +517,63 @@
         .vs { display: none; } /* Hide VS on mobile */
         .old-way-time, .new-way-time { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
         
-        /* Logic Table - Card View for Mobile */
-        .table-scroll { overflow: visible; border: none; box-shadow: none; }
-        .logic-table { width: 100%; display: block; }
-        .logic-table thead { display: none; }
-        .logic-table tbody { display: block; }
-        .logic-table tr { 
-            display: block; 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            margin-bottom: 16px; 
-            padding: 16px;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .logic-table td { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 8px 0; 
-            border: none; 
-            border-bottom: 1px solid var(--bg-off);
-            text-align: right;
-        }
-        .logic-table td:last-child { border-bottom: none; }
-        .logic-table td::before {
-            content: attr(data-label);
-            font-weight: 600;
-            color: var(--text-muted);
-            text-align: left;
-            margin-right: 16px;
-        }
-        .logic-table td.check { color: var(--green); font-weight: 700; }
+/* Logic Table - Mobile: real table + horizontal scroll (like big SaaS sites) */
+.table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.logic-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* forces side-scroll on small screens */
+}
+
+.logic-table thead {
+    display: table-header-group;
+}
+
+.logic-table tbody {
+    display: table-row-group;
+}
+
+.logic-table tr {
+    display: table-row;
+}
+
+.logic-table th,
+.logic-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.logic-table th {
+    font-weight: 700;
+}
+
+.logic-table td.check {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.logic-table td.center {
+    text-align: center;
+}
+
+.logic-table td.cross {
+    color: #EF4444;
+    text-align: center;
+}
+
+/* kill mobile pseudo-labels so it looks like a proper table */
+.logic-table td::before {
+    content: none;
+}
+
         
         /* --- 10. PRICING & FAQ --- */
         .offer-card { padding: 40px 20px; border-radius: 16px; border-width: 2px; }
@@ -556,15 +582,37 @@
         .faq-item summary { padding: 16px; font-size: 16px; }
         .founder-grid { display: grid; grid-template-columns: 1fr; text-align: center; gap: 24px; justify-items: center; }
 
-        /* --- 11. STICKY MOBILE CTA --- */
-        .mobile-sticky-cta {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; padding: 12px 20px;
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            z-index: 9999;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+/* --- 11. STICKY MOBILE CTA --- */
+.mobile-sticky-cta {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: white; padding: 12px 20px 16px 20px;
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.12);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.mobile-sticky-label {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 13px;
+    text-align: center;
+}
+
+.mobile-sticky-btn {
+    font-size: 16px;
+    min-height: 56px;
+    width: 100%;
+}
+
+/* Checklist SVG Styling */
+.checklist-icon { color: var(--green); flex-shrink: 0; width: 24px; height: 24px; }
+
+.funnel-card { width: 100%; }
+
         
         /* Checklist SVG Styling */
         .checklist-icon { color: var(--green); flex-shrink: 0; width: 24px; height: 24px; }
@@ -595,6 +643,37 @@
                 grid-template-columns: 1fr 1.2fr; 
                 gap: 60px; 
                 align-items: center; 
+/* Mobile-only layout refinements */
+@media (max-width: 767.98px) {
+    /* Less dead space in hero, but keep room for header so video isn’t hidden */
+    .hero {
+        padding-top: 140px;
+        padding-bottom: 24px;
+    }
+
+    .hero h1 {
+        margin-bottom: 8px;
+    }
+
+    .hero p.sub {
+        margin-top: 4px;
+        margin-bottom: 12px;
+    }
+
+    /* Reduce the big gap between trust row and benefits */
+    .benefits-section {
+        padding-top: 36px;
+    }
+
+    /* Make sure the video block sits tight under the header, no weird gap */
+    .video-column {
+        margin: 4px 0 0 0;
+    }
+}
+
+
+
+                
             }
             .hero h1 { font-size: 58px; margin-bottom: 20px; order: unset; }
             .hero p.sub { font-size: 19px; max-width: 520px; margin-bottom: 32px; order: unset; }
@@ -1160,7 +1239,7 @@
             <p style="font-size: 18px; opacity: 0.8; margin-bottom: 40px; line-height: 1.6;">I want to make sure this is right for you. Let's chat for 10 minutes. No sales pressure—just a demo of how it works for your specific trade.</p>
             
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                <a href="https://calendly.com/" target="_blank" class="btn btn-white">
+                <a href="https://calendly.com/billing-tradeanchor/30min" target="_blank" class="btn btn-white">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:8px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     Book A 15-Min Demo Call
                 </a>
@@ -1235,10 +1314,11 @@
     </footer>
     
     <!-- MOBILE STICKY CTA -->
-    <div class="mobile-sticky-cta">
-        <div style="font-weight: 700; color: var(--navy); font-size: 12px;">Only 2 Spots Left</div>
-        <a href="#test-drive" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px; min-height: 44px; width: auto;">Test Drive It (30s)</a>
-    </div>
+<div class="mobile-sticky-cta">
+    <div class="mobile-sticky-label">Only 2 Spots Left</div>
+    <a href="#test-drive" class="btn btn-primary mobile-sticky-btn">Test Drive It (30s)</a>
+</div>
+
 
     <!-- JS (Kept functionality identical) -->
     <script>
