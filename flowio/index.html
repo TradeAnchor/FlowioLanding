@@ -498,7 +498,7 @@
         
         .accept-page {
             background: white; width: 100%; border-radius: 20px 20px 0 0;
-            padding: 24px; max-height: 90vh; overflow-y: auto;
+            padding: 24px; max-height: 90vh;padding-bottom: 110px; /* room so Confirm button sits above sticky CTA on mobile */ overflow-y: auto;
         }
         .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-off); border: none; font-size: 20px; color: var(--text-muted); }
         
@@ -729,7 +729,7 @@
             .accept-quote-btn { width: auto; }
             
             .modal-overlay { align-items: center; justify-content: center; padding: 20px; }
-            .accept-page { border-radius: 20px; max-width: 600px; padding: 48px; max-height: 90vh; }
+            .accept-page { border-radius: 20px; max-width: 600px; padding: 48px; padding-bottom: 48px; max-height: 90vh; }
             
             /* Automation Desktop */
             .automation-header h2 { font-size: 42px; }
@@ -1071,10 +1071,13 @@
                         <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--navy);">Start Time</label>
                         <input type="time" class="time-input" required>
                         
-                        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 24px;">
-                            <input type="checkbox" id="accept-terms" style="width: 20px; height: 20px; margin-top: 2px;" required>
-                            <label for="accept-terms" style="font-size: 14px; line-height: 1.4;">I accept this quote and the terms.</label>
-                        </div>
+                         <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 24px;">
+    <input type="checkbox" id="accept-terms" style="width: 20px; height: 20px; margin-top: 2px;" required>
+    <label for="accept-terms" style="font-size: 14px; line-height: 1.4; color: var(--navy);">
+        I accept this quote and the Terms &amp; Conditions.
+    </label>
+</div>
+
                         
                         <button class="confirm-btn" onclick="confirmBooking()">Confirm & Book</button>
                     </div>
