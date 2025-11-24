@@ -38,6 +38,7 @@
             background: var(--bg);
             line-height: 1.6;
             overflow-x: hidden;
+            padding-top: 40px; /* Space for top bar */
         }
 
         /* --- UTILITIES --- */
@@ -83,25 +84,66 @@
         }
         .btn-white:active { transform: translateY(4px); box-shadow: none; }
 
+        /* --- TOP SCARCITY BAR --- */
+        .top-scarcity-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #FFF7ED;
+            color: #9A3412;
+            text-align: center;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 2000;
+            border-bottom: 1px solid #FED7AA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pulsing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
         /* --- HEADER --- */
         header {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
+            position: absolute; top: 40px; width: 100%;
+            background: transparent;
             z-index: 1000;
-            padding: 16px 0;
+            padding: 20px 0;
         }
         header .flex { display: flex; justify-content: space-between; align-items: center; }
         
         .logo-wrapper { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        
+        /* LOGO IMAGE STYLING */
+        .logo-img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+        
         .logo-text { font-size: 24px; font-weight: 900; color: var(--navy); letter-spacing: -0.03em; line-height: 1; }
         .logo-text span { color: var(--orange); }
         
         .nav-cta { padding: 10px 20px; font-size: 15px; }
 
         /* --- HERO --- */
-        .hero { padding-top: 140px; padding-bottom: 20px; background: linear-gradient(to bottom, var(--bg-off), white); }
+        .hero { 
+            padding-top: 140px; 
+            padding-bottom: 40px; 
+            background: linear-gradient(to bottom, var(--bg-off), white); 
+        }
         
         .hero h1 {
             font-size: 58px; line-height: 1.05; font-weight: 900; color: var(--navy);
@@ -116,27 +158,22 @@
             line-height: 1.5; 
         }
 
-        .scarcity-pill {
-            display: inline-block;
-            background: #FFF7ED; color: #9A3412;
-            padding: 6px 16px; border-radius: 50px;
-            font-size: 14px; font-weight: 700;
-            margin-bottom: 24px; border: 1px solid #FED7AA;
-        }
-        .scarcity-pill span { display: inline-block; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
         .hero-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; }
 
-        /* Video Container - 20% BIGGER */
+        /* Video Container */
         .video-frame {
             background: var(--navy);
             padding: 14px; 
             border-radius: 18px;
             box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.35);
-            transform: rotate(-1deg);
+            transform: none;
+            transition: transform 0.3s ease;
         }
+        
+        .video-frame:hover {
+            transform: scale(1.02);
+        }
+
         .video-wrapper {
             position: relative; 
             padding-bottom: 56.25%; 
@@ -149,13 +186,20 @@
 
         /* Trust Indicator under CTA */
         .hero-trust {
-            margin-top: 24px;
+            /* Removed margin-top: 24px to fix spacing issue */
             font-size: 14px;
             color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .hero-trust-row {
             display: flex;
             align-items: center;
             gap: 6px;
         }
+        
         .hero-trust .dot {
             width: 8px;
             height: 8px;
@@ -164,7 +208,7 @@
             display: inline-block;
         }
 
-        /* --- BENTO GRID BENEFITS (REDESIGNED) --- */
+        /* --- BENTO GRID BENEFITS --- */
         .benefits-section { 
             padding: 120px 0; 
             background: linear-gradient(180deg, white 0%, var(--bg-off) 100%);
@@ -251,9 +295,7 @@
             overflow: hidden;
         }
         
-        /* --- MOCKUP VISUALS (CSS-based Placeholders for Real Screenshots) --- */
-        
-        /* Stripe Notification Mockup */
+        /* --- MOCKUP VISUALS --- */
         .mock-stripe {
             background: white;
             padding: 16px 20px;
@@ -276,7 +318,6 @@
         .mock-stripe-title { font-size: 12px; color: #64748B; font-weight: 600; }
         .mock-stripe-amount { font-size: 18px; color: #0F172A; font-weight: 800; }
         
-        /* Sheets Mockup */
         .mock-sheet {
             background: white;
             border: 1px solid #E2E8F0;
@@ -299,7 +340,6 @@
             font-size: 12px; font-weight: 600; color: #334155;
         }
         
-        /* Phone PDF Mockup */
         .mock-phone {
             width: 140px; height: 240px;
             background: #0F172A;
@@ -318,7 +358,6 @@
         .mock-pdf-header { height: 40px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
         .mock-pdf-line { height: 8px; background: #E2E8F0; margin: 12px; border-radius: 4px; width: 60%; }
         
-        /* Drive Folder Mockup */
         .mock-folder {
             width: 80px; height: 60px;
             background: #FFD04B;
@@ -370,7 +409,6 @@
             margin-bottom: 8px;
         }
         
-        /* UPDATED GRID: 340px for Text, Remainder for Form */
         .demo-grid { display: grid; grid-template-columns: 340px 1fr; gap: 60px; align-items: start; }
         
         .demo-text p { font-size: 17px; opacity: 0.9; margin-bottom: 20px; line-height: 1.6; }
@@ -1457,45 +1495,101 @@
         .founder-grid { display: grid; grid-template-columns: 100px 1fr; gap: 30px; max-width: 800px; margin: 0 auto; align-items: center; }
         .avatar { width: 100px; height: 100px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 32px; }
 
+        /* --- STICKY MOBILE CTA --- */
+        .mobile-sticky-cta {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 9999;
+            display: none; /* Hidden on desktop */
+            justify-content: space-between;
+            align-items: center;
+        }
+
         /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .hero { padding-top: 100px; padding-bottom: 40px; }
+            .mobile-sticky-cta { display: flex; }
+            .nav-cta { display: none; } /* Hide header CTA */
+            
+            /* Updated: Hide only the button in Hero CTA, keep text visible */
+            .hero-cta-group .btn { display: none; } 
+            .hero-cta-group { width: 100% !important; align-items: flex-start; }
+            
+            .hero { padding-top: 80px; padding-bottom: 40px; }
             
             .hero h1 { font-size: 36px; margin-bottom: 16px; }
             
             .hero p.sub { font-size: 17px; margin-bottom: 24px; }
             
+            /* Mobile order: H1 -> Sub -> Video -> Trust */
             .hero-grid { 
-                grid-template-columns: 1fr; 
-                gap: 32px; 
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
             }
             
-            /* Mobile order: headline → price → video → CTA → trust */
             .hero-content {
                 display: flex;
                 flex-direction: column;
             }
             
-            .scarcity-pill { order: 1; }
-            .hero h1 { order: 2; }
-            .hero p.sub { order: 3; }
-            .hero-visual { order: 4; margin-bottom: 24px; }
-            .hero-cta-group { order: 5; width: 100%; }
-            .hero-trust { order: 6; }
+            .hero h1 { order: 1; }
+            .hero p.sub { order: 2; }
+            /* Video moves here visually via flex order */
+            .hero-visual { order: 3; width: 100%; margin-bottom: 24px; }
+            /* Trust section (now in CTA group) follows video */
+            .hero-cta-group { order: 4; margin-top: -10px; }
             
-            .video-frame { transform: rotate(0); }
+            .video-frame { transform: none; }
             
             .btn { width: 100%; justify-content: center; }
             
-            /* Mobile BENTO STACK */
-            .benefits-section { padding: 80px 0; }
-            .benefits-header h2 { font-size: 28px; }
+            /* Table transformation for mobile */
+            table, thead, tbody, th, td, tr { 
+                display: block; 
+            }
             
+            thead tr { 
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+            
+            td { 
+                border: none;
+                border-bottom: 1px solid var(--border); 
+                position: relative;
+                padding-left: 50%; 
+                text-align: right;
+            }
+            
+            td:last-child { border-bottom: none; }
+            
+            td:before { 
+                position: absolute;
+                top: 24px;
+                left: 12px;
+                width: 45%; 
+                padding-right: 10px; 
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                content: attr(data-label);
+                color: var(--navy);
+            }
+            
+            .table-scroll { border: none; box-shadow: none; overflow: visible; }
+            
+            /* Rest of mobile styles */
+            .benefits-section { padding: 80px 0 120px; }
+            .benefits-header h2 { font-size: 28px; }
             .bento-grid { grid-template-columns: 1fr; gap: 24px; }
             .bento-span-2, .bento-span-1 { grid-column: span 1; }
             .bento-visual { height: 180px; }
             
-            /* Demo Grid */
             .demo-text { text-align: center; }
             .demo-grid { grid-template-columns: 1fr; gap: 40px; }
             .demo-card { padding: 24px; }
@@ -1503,125 +1597,50 @@
             
             .sheets-content { padding: 16px; }
             
-            .sheet-section-header {
-                grid-template-columns: 80px 1fr 50px 60px 60px;
-                font-size: 10px;
-                padding: 6px;
-            }
-            
-            .selected-item {
-                grid-template-columns: 80px 1fr 50px 60px 60px;
+            .table-row {
+                grid-template-columns: 100px 1fr;
                 font-size: 12px;
             }
             
-            .quote-header {
-                flex-direction: column;
-                gap: 20px;
-            }
+            .quote-header { flex-direction: column; gap: 20px; }
+            .quote-meta { grid-template-columns: 1fr; }
             
-            .quote-meta {
-                grid-template-columns: 1fr;
-            }
+            .accept-page { padding: 32px 24px; }
+            .accept-header h2 { font-size: 24px; }
+            .summary-row { font-size: 16px; }
+            .summary-row.total { font-size: 20px; }
             
-            .accept-page {
-                padding: 32px 24px;
-            }
-            
-            .accept-header h2 {
-                font-size: 24px;
-            }
-            
-            .summary-row {
-                font-size: 16px;
-            }
-            
-            .summary-row.total {
-                font-size: 20px;
-            }
-            
-            /* Automation showcase mobile */
-            .automation-showcase {
-                padding: 40px 20px;
-            }
-            
-            .automation-header h2 {
-                font-size: 28px;
-            }
-            
-            .automation-header p {
-                font-size: 16px;
-            }
-            
-            .checkmark-big {
-                width: 64px;
-                height: 64px;
-                font-size: 36px;
-            }
-            
-            .automation-grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-            
-            .automation-step {
-                padding: 24px;
-            }
-            
-            .automation-summary {
-                padding: 32px 20px;
-            }
-            
-            .automation-summary h3 {
-                font-size: 20px;
-            }
-            
-            .time-comparison {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            
-            .vs {
-                display: none;
-            }
-            
-            .time-value {
-                font-size: 32px;
-            }
-            
-            .timer-wrapper {
-                grid-template-columns: 1fr;
-            }
-            
-            table { min-width: 100%; font-size: 14px; }
+            .automation-showcase { padding: 40px 20px; }
+            .automation-header h2 { font-size: 28px; }
+            .automation-grid { grid-template-columns: 1fr; gap: 24px; }
+            .automation-step { padding: 24px; }
+            .time-comparison { grid-template-columns: 1fr; gap: 16px; }
+            .vs { display: none; }
+            .time-value { font-size: 32px; }
+            .timer-wrapper { grid-template-columns: 1fr; }
             
             .offer-card { padding: 40px 20px; }
             .price-big { font-size: 56px; }
-            
             .funnel-section h2 { font-size: 32px; }
-            
-            .founder-grid { 
-                grid-template-columns: 1fr; 
-                text-align: center; 
-                justify-items: center; 
-            }
+            .founder-grid { grid-template-columns: 1fr; text-align: center; justify-items: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- TOP SCARCITY BAR -->
+    <div class="top-scarcity-bar">
+        <span class="pulsing-dot"></span>
+        <span>Only 2 installs available this week</span>
+    </div>
+
     <!-- HEADER -->
     <header>
         <div class="container flex">
             <a href="#" class="logo-wrapper">
-                <svg width="40" height="40" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="512" height="512" rx="100" fill="#0F172A"/>
-                    <path d="M128 100H384L360 140H280V350C280 350 280 430 256 430C232 430 232 350 232 350V140H152L128 100Z" fill="white"/>
-                    <path d="M128 300C128 300 130 380 200 420" stroke="white" stroke-width="30" stroke-linecap="round"/>
-                    <path d="M384 300C384 300 382 380 312 420" stroke="white" stroke-width="30" stroke-linecap="round"/>
-                    <path d="M128 300L150 280" stroke="white" stroke-width="30" stroke-linecap="round"/>
-                    <path d="M384 300L362 280" stroke="white" stroke-width="30" stroke-linecap="round"/>
-                </svg>
-                <div class="logo-text">Trade<span>Anchor</span></div>
+                <!-- Replaced SVG with Image as requested -->
+                <img src="logo.png" alt="TradeAnchor Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <div class="logo-text" style="display:none;">Trade<span>Anchor</span></div>
             </a>
             <a href="#test-drive" class="btn btn-primary nav-cta">Test Drive</a>
         </div>
@@ -1631,19 +1650,26 @@
     <section class="hero">
         <div class="container hero-grid">
             <div class="hero-content">
-                <div class="scarcity-pill"><span></span>Setup: $1,800 · 2 Spots Left</div>
                 
                 <h1>Stop doing paperwork at 9:00 PM.</h1>
-                <p class="sub">We install the <strong>Flowio™ System</strong> into your business. The power of a $50k app, inside a simple Google Sheet.</p>
+                <p class="sub">Flowio does your quoting, booking, and follow-ups inside Google Sheets you already use.</p>
                 
-                <div class="hero-cta-group" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <!-- Unified CTA & Trust Group -->
+                <div class="hero-cta-group" style="display: flex; flex-direction: column; gap: 12px; width: fit-content;">
                     <a href="#test-drive" class="btn btn-primary">Test Drive It (30s)</a>
+                    
+                    <div class="hero-trust">
+                        <div class="hero-trust-row">
+                            <span class="dot"></span>
+                            <span>100% Google Native. Zero Learning Curve.</span>
+                        </div>
+                        <div class="hero-trust-row">
+                            <span class="dot"></span>
+                            <span>No subscription - one-time setup</span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="hero-trust">
-                    <span class="dot"></span>
-                    <span>100% Google Native. Zero Learning Curve.</span>
-                </div>
             </div>
             
             <div class="hero-visual">
@@ -2125,28 +2151,28 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Learning Curve</strong></td>
-                            <td class="check">Zero (It's a Spreadsheet)</td>
-                            <td class="center">High (Days of training)</td>
-                            <td class="center">Medium</td>
+                            <td data-label="Feature"><strong>Learning Curve</strong></td>
+                            <td data-label="Flowio System" class="check">Zero (It's a Spreadsheet)</td>
+                            <td data-label="ServiceM8 / Jobber" class="center">High (Days of training)</td>
+                            <td data-label="Excel / Word" class="center">Medium</td>
                         </tr>
                         <tr>
-                            <td><strong>Automation</strong></td>
-                            <td class="check">Full (SMS, Stripe, Calendar)</td>
-                            <td class="center">Good</td>
-                            <td class="cross">None</td>
+                            <td data-label="Feature"><strong>Automation</strong></td>
+                            <td data-label="Flowio System" class="check">Full (SMS, Stripe, Calendar)</td>
+                            <td data-label="ServiceM8 / Jobber" class="center">Good</td>
+                            <td data-label="Excel / Word" class="cross">None</td>
                         </tr>
                         <tr>
-                            <td><strong>Setup Time</strong></td>
-                            <td class="check">Done-For-You (48 Hrs)</td>
-                            <td class="center">DIY (Weeks)</td>
-                            <td class="center">Instant</td>
+                            <td data-label="Feature"><strong>Setup Time</strong></td>
+                            <td data-label="Flowio System" class="check">Done-For-You (48 Hrs)</td>
+                            <td data-label="ServiceM8 / Jobber" class="center">DIY (Weeks)</td>
+                            <td data-label="Excel / Word" class="center">Instant</td>
                         </tr>
                         <tr>
-                            <td><strong>Ownership</strong></td>
-                            <td class="check">You Own The Data</td>
-                            <td class="cross">Rented (Stop paying, lose data)</td>
-                            <td class="center">You Own It</td>
+                            <td data-label="Feature"><strong>Ownership</strong></td>
+                            <td data-label="Flowio System" class="check">You Own The Data</td>
+                            <td data-label="ServiceM8 / Jobber" class="cross">Rented (Stop paying, lose data)</td>
+                            <td data-label="Excel / Word" class="center">You Own It</td>
                         </tr>
                     </tbody>
                 </table>
@@ -2262,6 +2288,12 @@
             </div>
         </div>
     </footer>
+    
+    <!-- MOBILE STICKY CTA -->
+    <div class="mobile-sticky-cta">
+        <div style="font-weight: 700; color: var(--navy);">Only 2 Spots Left</div>
+        <a href="#test-drive" class="btn btn-primary" style="padding: 10px 20px; font-size: 15px;">Test Drive</a>
+    </div>
 
     <script>
         // Job data with realistic pricing
