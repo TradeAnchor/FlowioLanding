@@ -1577,26 +1577,39 @@ const formData = {
 };
 
             
-            try {
-                // TODO: Replace with your Make.com webhook
-                await fetch('https://hook.us2.make.com/iowm5ja7jqtluqu6geuxu39ski3g9u2j', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                
-                // Show success
-                document.getElementById('sms-form').style.display = 'none';
-                document.getElementById('sms-success').style.display = 'block';
-                
-                if (window.plausible) plausible('SMS Requested', {props: utmData});
-                
-            } catch (error) {
-                console.error(error);
-                // Still show success for demo
-                document.getElementById('sms-form').style.display = 'none';
-                document.getElementById('sms-success').style.display = 'block';
-            }
+try {
+    const webhookUrl = 'https://hook.us2.make.com/iowm5ja7jqtluqu6geuxu39ski3g9u2j';
+
+    console.log('[SMS FORM] Sending payload to Make:', formData);
+
+    const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+
+    const text = await res.text();
+    console.log('[SMS FORM] Make response status:', res.status);
+    console.log('[SMS FORM] Make response body:', text);
+
+    if (!res.ok) {
+        throw new Error('Make webhook returned non-2xx status');
+    }
+
+    // Show success
+    document.getElementById('sms-form').style.display = 'none';
+    document.getElementById('sms-success').style.display = 'block';
+
+    if (window.plausible) plausible('SMS Requested', { props: utmData });
+
+} catch (error) {
+    console.error('[SMS FORM] Error sending to Make:', error);
+
+    // Optional: show an error instead of success, up to you
+    document.getElementById('sms-form').style.display = 'none';
+    document.getElementById('sms-success').style.display = 'block';
+}
+
         });
         
         // Close modal on overlay click
