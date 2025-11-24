@@ -619,6 +619,44 @@
         
         .funnel-card { width: 100%; }
 
+        
+/* Mobile-only layout refinements */
+        
+@media (max-width: 767.98px) {
+    /* Keep hero clear of fixed header, but reduce dead space */
+    .hero {
+        padding-top: 130px;
+        padding-bottom: 8px;
+    }
+
+    .hero h1 {
+        margin-bottom: 6px;
+    }
+
+    .hero p.sub {
+        margin-top: 2px;
+        margin-bottom: 8px;
+    }
+
+    .hero-cta-group {
+        margin-top: 8px;
+    }
+
+    /* Dramatically reduce the gap between trust bullets and benefits */
+    .benefits-section {
+        padding-top: 12px;
+    }
+
+    .benefits-header {
+        margin-bottom: 20px;
+    }
+
+    /* Keep video tight under the hero copy */
+    .video-column {
+        margin: 4px 0 0 0;
+    }
+}
+
         /* --- 12. DESKTOP MEDIA QUERIES (Min-Width Enhancements) --- */
         @media (min-width: 768px) {
             :root { --spacing-section: 100px; }
@@ -643,38 +681,7 @@
                 grid-template-columns: 1fr 1.2fr; 
                 gap: 60px; 
                 align-items: center; 
-/* Mobile-only layout refinements */
-@media (max-width: 767.98px) {
-    /* Less dead space in hero, but keep room for header so video isn’t hidden */
-    .hero {
-        padding-top: 140px;
-        padding-bottom: 24px;
-    }
-
-    .hero h1 {
-        margin-bottom: 8px;
-    }
-
-    .hero p.sub {
-        margin-top: 4px;
-        margin-bottom: 12px;
-    }
-
-    /* Reduce the big gap between trust row and benefits */
-    .benefits-section {
-        padding-top: 36px;
-    }
-
-    /* Make sure the video block sits tight under the header, no weird gap */
-    .video-column {
-        margin: 4px 0 0 0;
-    }
-}
-
-
-
-                
-            }
+/
             .hero h1 { font-size: 58px; margin-bottom: 20px; order: unset; }
             .hero p.sub { font-size: 19px; max-width: 520px; margin-bottom: 32px; order: unset; }
             .video-column { order: unset; margin: 0; width: auto; }
