@@ -1413,249 +1413,281 @@
         };
         
         let selectedItems = [];
-        let startTime;
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            function updateItemsDisplay() {
-                const tbody = document.getElementById('selected-items');
-                if (selectedItems.length === 0) {
-                    tbody.innerHTML = `<tr class="empty-state"><td colspan="5" style="display:block; text-align:center; padding:24px; color:#64748B;">Select items from the dropdown above</td></tr>`;
-                    return;
-                }
-                const html = selectedItems.map((item) => `
-                    <tr>
-                        <td data-label="SKU" class="sku-col">${item.sku}</td>
-                        <td data-label="Item">${item.name}</td>
-                        <td data-label="Qty" class="qty-col">${item.qty}</td>
-                        <td data-label="Rate" class="rate-col">$${item.rate.toFixed(2)}</td>
-                        <td data-label="Total" class="total-col">$${(item.qty * item.rate).toFixed(2)}</td>
-                    </tr>
-                `).join('');
-                tbody.innerHTML = html;
-            }
-            
-            function updateTotals() {
-                const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
-                const gst = subtotal * 0.1;
-                const total = subtotal + gst;
-                document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
-                document.getElementById('gst-display').textContent = `$${gst.toFixed(2)}`;
-                document.getElementById('total-display').textContent = `$${total.toFixed(2)}`;
-            }
-            
-            const jobSelect = document.getElementById('job-select');
-            jobSelect.addEventListener('change', function() {
-                const val = this.value;
-                if (!val) return;
-                const job = jobData[val];
-                if (selectedItems.find(item => item.sku === job.sku)) { this.value = ''; return; }
-                selectedItems.push({...job});
-                updateItemsDisplay();
-                updateTotals();
-                document.getElementById('generate-btn').disabled = false;
-                this.value = '';
-            });
-            
-            document.getElementById('generate-btn').addEventListener('click', function() {
-                if (selectedItems.length === 0) return;
-                startTime = Date.now();
-                document.getElementById('timer-display').style.display = 'grid';
-                let elapsed = 0;
-                const timerInterval = setInterval(() => {
-                    elapsed += 0.1;
-                    document.getElementById('flowio-timer').textContent = `⚡ ${elapsed.toFixed(1)}s`;
-                }, 100);
-                this.innerHTML = '⚡ Generating...';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    clearInterval(timerInterval);
-                    const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
-                    document.getElementById('flowio-timer').textContent = `⚡ ${finalTime}s`;
-                    const userMobile = document.getElementById('user-mobile').value;
-                    const userEmail = document.getElementById('user-email').value;
-                    generateQuote(userMobile, userEmail);
-                    document.getElementById('stage-1').style.display = 'none';
-                    document.getElementById('stage-2').style.display = 'block';
-                    document.getElementById('time-elapsed').textContent = `${finalTime} seconds`;
-                    if (window.plausible) plausible('Quote Generated');
-                }, 1500);
-            });
-        });
-        
-        function generateQuote(mobile, email) {
-            const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
-            const gst = subtotal * 0.1;
-            const total = subtotal + gst;
-            const clientEmail = email || 'sean@tradeanchor.com.au';
-            const clientPhone = mobile || '0491 570 156';
-            
-            // FULLY RESTORED ORIGINAL TEMPLATE STRUCTURE
-            const quoteHTML = `
-                <div class="quote-header">
-                    <div>
-                        <div class="quote-company">TradeAnchor</div>
-                        <div class="quote-contact">
-                            Email: support@tradeanchor.com.au<br>
-                            ABN: 45 529 331 663
-                        </div>
-                    </div>
-                    <div class="quote-logo">⚓</div>
-                </div>
-                
-                <div style="margin-bottom: 32px;">
-                    <h3 style="font-size: 14px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Bill To:</h3>
-                    <div style="font-size: 16px; color: var(--navy); line-height: 1.6;">
-                        <strong>Sean Miller</strong><br>
-                        ${clientEmail}<br>
-                        ${clientPhone}<br>
-                        Sydney, NSW
-                    </div>
-                </div>
-                
-                <div class="quote-meta">
-                    <div class="quote-meta-item">
-                        <label>Quote ID</label>
-                        <value>Q0004</value>
-                    </div>
-                    <div class="quote-meta-item">
-                        <label>Quote date</label>
-                        <value>22 Nov 2025</value>
-                    </div>
-                    <div class="quote-meta-item">
-                        <label>Quote due date</label>
-                        <value>06 Dec 2025</value>
-                    </div>
-                </div>
-                
-                <table class="quote-table" style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-                    <thead>
-                        <tr>
-                            <th style="background: var(--bg-off); padding: 12px; text-align: left; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Item</th>
-                            <th style="background: var(--bg-off); padding: 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Qty</th>
-                            <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Rate</th>
-                            <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${selectedItems.map(item => `
-                            <tr>
-                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main);">${item.name}</td>
-                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: center;">${item.qty}</td>
-                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${item.rate.toFixed(2)}</td>
-                                <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${(item.qty * item.rate).toFixed(2)}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                
-                <div style="text-align: right; margin-bottom: 32px;">
-                    <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
-                        <div style="margin-right: 40px; color: var(--text-muted);">Subtotal:</div>
-                        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${subtotal.toFixed(2)}</div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
-                        <div style="margin-right: 40px; color: var(--text-muted);">GST (10%):</div>
-                        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${gst.toFixed(2)}</div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; padding: 12px 0; margin-top: 8px; border-top: 2px solid var(--navy); font-size: 20px; font-weight: 800; color: var(--navy);">
-                        <div style="margin-right: 40px; color: var(--text-muted);">Total:</div>
-                        <div style="min-width: 120px;">$${total.toFixed(2)}</div>
-                    </div>
-                </div>
-                
-                <div style="text-align: center;">
-                    <button class="accept-quote-btn" onclick="showAcceptModal()">
-                        Accept quote →
-                    </button>
-                </div>
-                
-                <div class="quote-terms">
-                    <strong>Terms and Conditions</strong><br>
-                    14 days
-                </div>
-            `;
-            
-            document.getElementById('quote-pdf').innerHTML = quoteHTML;
-            document.getElementById('accept-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('accept-total').textContent = `$${total.toFixed(2)}`;
-        }
-        
-        function showAcceptModal() {
-            document.getElementById('accept-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            if (window.plausible) plausible('Accept Quote Clicked');
-        }
-        function closeAcceptModal() {
-            document.getElementById('accept-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        function confirmBooking() {
-            if (!document.getElementById('accept-terms').checked) {
-                alert('Please accept terms'); return;
-            }
-            closeAcceptModal();
-            document.getElementById('stage-2').style.display = 'none';
-            document.getElementById('behind-scenes').style.display = 'block';
-            document.getElementById('behind-scenes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            if (window.plausible) plausible('Booking Confirmed');
-        }
-        function showSMSOption() {
-            document.getElementById('behind-scenes').style.display = 'none';
-            document.getElementById('sms-option').style.display = 'block';
-            document.getElementById('sms-option').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        // UTM Tracking
-        const utmData = {
-            source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
-            medium: new URLSearchParams(window.location.search).get('utm_medium') || 'none',
-            campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'none'
-        };
+let startTime;
 
-        // SMS Form Submission
-        document.getElementById('sms-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Honeypot check
-            if (e.target.website.value !== '') return;
-            
-            const phone = document.getElementById('phone-input').value;
-            const btn = e.target.querySelector('button');
-            btn.innerHTML = 'Sending...';
-            btn.disabled = true;
-            
-const formData = {
-    phone: phone,
-    email: document.getElementById('user-email').value || '',
-    name: 'Demo Lead', // or capture a name field later
-    items: selectedItems,
-    subtotal,
-    gst,
-    total,
-    utm: utmData,
-    timestamp: new Date().toISOString()
+function calcQuoteTotals(items) {
+  const subtotal = items.reduce((sum, item) => sum + (Number(item.qty) * Number(item.rate)), 0);
+  const gst = subtotal * 0.10;
+  const total = subtotal + gst;
+  return {
+    subtotal: Number(subtotal.toFixed(2)),
+    gst: Number(gst.toFixed(2)),
+    total: Number(total.toFixed(2))
+  };
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  function updateItemsDisplay() {
+    const tbody = document.getElementById('selected-items');
+    if (selectedItems.length === 0) {
+      tbody.innerHTML = `<tr class="empty-state"><td colspan="5" style="display:block; text-align:center; padding:24px; color:#64748B;">Select items from the dropdown above</td></tr>`;
+      return;
+    }
+    const html = selectedItems.map((item) => `
+      <tr>
+        <td data-label="SKU" class="sku-col">${item.sku}</td>
+        <td data-label="Item">${item.name}</td>
+        <td data-label="Qty" class="qty-col">${item.qty}</td>
+        <td data-label="Rate" class="rate-col">$${item.rate.toFixed(2)}</td>
+        <td data-label="Total" class="total-col">$${(item.qty * item.rate).toFixed(2)}</td>
+      </tr>
+    `).join('');
+    tbody.innerHTML = html;
+  }
+
+  function updateTotals() {
+    const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
+    const gst = subtotal * 0.1;
+    const total = subtotal + gst;
+    document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('gst-display').textContent = `$${gst.toFixed(2)}`;
+    document.getElementById('total-display').textContent = `$${total.toFixed(2)}`;
+  }
+
+  const jobSelect = document.getElementById('job-select');
+  jobSelect.addEventListener('change', function() {
+    const val = this.value;
+    if (!val) return;
+    const job = jobData[val];
+    if (selectedItems.find(item => item.sku === job.sku)) { this.value = ''; return; }
+    selectedItems.push({ ...job });
+    updateItemsDisplay();
+    updateTotals();
+    document.getElementById('generate-btn').disabled = false;
+    this.value = '';
+  });
+
+  document.getElementById('generate-btn').addEventListener('click', function() {
+    if (selectedItems.length === 0) return;
+    startTime = Date.now();
+    document.getElementById('timer-display').style.display = 'grid';
+    let elapsed = 0;
+    const timerInterval = setInterval(() => {
+      elapsed += 0.1;
+      document.getElementById('flowio-timer').textContent = `⚡ ${elapsed.toFixed(1)}s`;
+    }, 100);
+    this.innerHTML = '⚡ Generating...';
+    this.disabled = true;
+
+    setTimeout(() => {
+      clearInterval(timerInterval);
+      const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+      document.getElementById('flowio-timer').textContent = `⚡ ${finalTime}s`;
+      const userMobile = document.getElementById('user-mobile').value;
+      const userEmail = document.getElementById('user-email').value;
+      generateQuote(userMobile, userEmail);
+      document.getElementById('stage-1').style.display = 'none';
+      document.getElementById('stage-2').style.display = 'block';
+      document.getElementById('time-elapsed').textContent = `${finalTime} seconds`;
+      if (window.plausible) plausible('Quote Generated');
+    }, 1500);
+  });
+
+}); // end DOMContentLoaded
+
+
+function generateQuote(mobile, email) {
+  const subtotal = selectedItems.reduce((sum, item) => sum + (item.qty * item.rate), 0);
+  const gst = subtotal * 0.1;
+  const total = subtotal + gst;
+  const clientEmail = email || 'sean@tradeanchor.com.au';
+  const clientPhone = mobile || '0491 570 156';
+
+  const quoteHTML = `
+    <div class="quote-header">
+      <div>
+        <div class="quote-company">TradeAnchor</div>
+        <div class="quote-contact">
+          Email: support@tradeanchor.com.au<br>
+          ABN: 45 529 331 663
+        </div>
+      </div>
+      <div class="quote-logo">⚓</div>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <h3 style="font-size: 14px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Bill To:</h3>
+      <div style="font-size: 16px; color: var(--navy); line-height: 1.6;">
+        <strong>Sean Miller</strong><br>
+        ${clientEmail}<br>
+        ${clientPhone}<br>
+        Sydney, NSW
+      </div>
+    </div>
+
+    <div class="quote-meta">
+      <div class="quote-meta-item">
+        <label>Quote ID</label>
+        <value>Q0004</value>
+      </div>
+      <div class="quote-meta-item">
+        <label>Quote date</label>
+        <value>22 Nov 2025</value>
+      </div>
+      <div class="quote-meta-item">
+        <label>Quote due date</label>
+        <value>06 Dec 2025</value>
+      </div>
+    </div>
+
+    <table class="quote-table" style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+      <thead>
+        <tr>
+          <th style="background: var(--bg-off); padding: 12px; text-align: left; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Item</th>
+          <th style="background: var(--bg-off); padding: 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Qty</th>
+          <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Rate</th>
+          <th style="background: var(--bg-off); padding: 12px; text-align: right; font-size: 13px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--border);">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${selectedItems.map(item => `
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main);">${item.name}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: center;">${item.qty}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${item.rate.toFixed(2)}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); text-align: right;">$${(item.qty * item.rate).toFixed(2)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+
+    <div style="text-align: right; margin-bottom: 32px;">
+      <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
+        <div style="margin-right: 40px; color: var(--text-muted);">Subtotal:</div>
+        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${subtotal.toFixed(2)}</div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; padding: 8px 0; font-size: 15px;">
+        <div style="margin-right: 40px; color: var(--text-muted);">GST (10%):</div>
+        <div style="min-width: 120px; color: var(--navy); font-weight: 600;">$${gst.toFixed(2)}</div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; padding: 12px 0; margin-top: 8px; border-top: 2px solid var(--navy); font-size: 20px; font-weight: 800; color: var(--navy);">
+        <div style="margin-right: 40px; color: var(--text-muted);">Total:</div>
+        <div style="min-width: 120px;">$${total.toFixed(2)}</div>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="accept-quote-btn" onclick="showAcceptModal()">Accept quote →</button>
+    </div>
+
+    <div class="quote-terms">
+      <strong>Terms and Conditions</strong><br>
+      14 days
+    </div>
+  `;
+
+  document.getElementById('quote-pdf').innerHTML = quoteHTML;
+  document.getElementById('accept-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+  document.getElementById('accept-total').textContent = `$${total.toFixed(2)}`;
+}
+
+function showAcceptModal() {
+  document.getElementById('accept-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  if (window.plausible) plausible('Accept Quote Clicked');
+}
+function closeAcceptModal() {
+  document.getElementById('accept-modal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+function confirmBooking() {
+  if (!document.getElementById('accept-terms').checked) {
+    alert('Please accept terms'); return;
+  }
+  closeAcceptModal();
+  document.getElementById('stage-2').style.display = 'none';
+  document.getElementById('behind-scenes').style.display = 'block';
+  document.getElementById('behind-scenes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (window.plausible) plausible('Booking Confirmed');
+}
+function showSMSOption() {
+  document.getElementById('behind-scenes').style.display = 'none';
+  document.getElementById('sms-option').style.display = 'block';
+  document.getElementById('sms-option').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// UTM Tracking
+const utmData = {
+  source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+  medium: new URLSearchParams(window.location.search).get('utm_medium') || 'none',
+  campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'none'
 };
 
-            
-try {
+// SMS Form Submission
+document.getElementById('sms-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Honeypot check
+  if (e.target.website.value !== '') return;
+
+  const phone = document.getElementById('phone-input').value;
+  const btn = e.target.querySelector('button');
+  btn.innerHTML = 'Sending...';
+  btn.disabled = true;
+
+  
+  const totals = calcQuoteTotals(selectedItems);
+
+  
+  const email =
+    (document.getElementById('email-input')?.value || '').trim() ||
+    (document.getElementById('user-email')?.value || '').trim();
+
+  const formData = {
+    customer: {
+      name: 'Demo Lead', // replace later with lead-name field if you add it
+      phone: phone,
+      email: email
+    },
+    quote: {
+      currency: 'AUD',
+      items: selectedItems.map(it => ({
+        sku: it.sku,
+        name: it.name,
+        qty: Number(it.qty),
+        rate: Number(it.rate),
+        lineTotal: Number((Number(it.qty) * Number(it.rate)).toFixed(2))
+      })),
+      subtotal: totals.subtotal,
+      gst: totals.gst,
+      total: totals.total
+    },
+    meta: {
+      utm_source: utmData.source,
+      utm_medium: utmData.medium,
+      utm_campaign: utmData.campaign,
+      pageUrl: window.location.href,
+      timestamp: new Date().toISOString()
+    }
+  };
+
+  try {
     const webhookUrl = 'https://hook.us2.make.com/iowm5ja7jqtluqu6geuxu39ski3g9u2j';
 
     console.log('[SMS FORM] Sending payload to Make:', formData);
 
     const res = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
     });
 
     const text = await res.text();
     console.log('[SMS FORM] Make response status:', res.status);
     console.log('[SMS FORM] Make response body:', text);
 
-    if (!res.ok) {
-        throw new Error('Make webhook returned non-2xx status');
-    }
+    if (!res.ok) throw new Error('Make webhook returned non-2xx status');
 
     // Show success
     document.getElementById('sms-form').style.display = 'none';
@@ -1663,20 +1695,27 @@ try {
 
     if (window.plausible) plausible('SMS Requested', { props: utmData });
 
-} catch (error) {
+  } catch (error) {
     console.error('[SMS FORM] Error sending to Make:', error);
 
-    // Optional: show an error instead of success, up to you
+    // keep your current behavior (show success anyway) OR change to show error
     document.getElementById('sms-form').style.display = 'none';
     document.getElementById('sms-success').style.display = 'block';
-}
 
-        });
-        
-        // Close modal on overlay click
-        document.getElementById('accept-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeAcceptModal();
-        });
+    /* ============================
+       OPTIONAL: if you prefer, re-enable button on error instead
+       (commented out; use if you want true error handling)
+    ============================ */
+    // btn.innerHTML = 'Send me the quote →';
+    // btn.disabled = false;
+  }
+});
+
+// Close modal on overlay click
+document.getElementById('accept-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAcceptModal();
+});
+
     </script>
 </body>
 </html>
