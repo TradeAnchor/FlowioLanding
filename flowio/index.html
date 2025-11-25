@@ -1139,15 +1139,76 @@
                 <div class="demo-card" style="max-width: 500px; margin: 0 auto; padding: 32px;">
                     <h3 style="color: var(--navy); margin-bottom: 16px; text-align: center; font-size: 24px; font-weight: 800;">Get the real experience</h3>
                     <p style="color: var(--text-muted); text-align: center; margin-bottom: 24px;">Enter your number and we'll send you an actual quote link.</p>
-                    
+                                    
                     <form id="sms-form">
-                        <div style="margin-bottom: 16px;">
-                            <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 8px; color: var(--navy);">Mobile Number</label>
-                            <input type="tel" id="phone-input" class="sheet-input-cell" placeholder="04XX XXX XXX" required style="border: 2px solid var(--border); background: white;">
-                        </div>
-                        <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send me the quote →</button>
-                    </form>
+    <!-- Name -->
+    <div style="margin-bottom: 12px;">
+        <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 6px; color: var(--navy);">
+            Name
+        </label>
+        <input type="text" id="lead-name" class="sheet-input-cell"
+               placeholder="John Smith" required
+               style="border: 2px solid var(--border); background: white;">
+    </div>
+
+    <!-- Trade -->
+    <div style="margin-bottom: 12px;">
+        <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 6px; color: var(--navy);">
+            Trade
+        </label>
+        <select id="lead-trade" class="sheet-input-cell" required
+                style="border: 2px solid var(--border); background: white;">
+            <option value="">Select your trade</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Plumber">Plumber</option>
+            <option value="HVAC">HVAC</option>
+            <option value="Handyman">Handyman</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <!-- Mobile -->
+    <div style="margin-bottom: 12px;">
+        <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 6px; color: var(--navy);">
+            Mobile
+        </label>
+        <input type="tel" id="phone-input" class="sheet-input-cell"
+               placeholder="04XX XXX XXX" required
+               style="border: 2px solid var(--border); background: white;">
+    </div>
+
+    <!-- Email -->
+    <div style="margin-bottom: 12px;">
+        <label style="font-weight: 600; font-size: 15px; display: block; margin-bottom: 6px; color: var(--navy);">
+            Email
+        </label>
+        <input type="email" id="email-input" class="sheet-input-cell"
+               placeholder="you@company.com" required
+               style="border: 2px solid var(--border); background: white;">
+    </div>
+
+    <!-- Honeypot -->
+    <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off">
+
+    <!-- Error message -->
+    <div id="sms-error" style="display:none; color:#DC2626; font-size:13px; margin-bottom:8px;">
+        Please enter a valid mobile number and email.
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width: 100%;">Send me the quote →</button>
+</form>
+
+<!-- Success block stays as-is -->
+<div id="sms-success" style="display: none; text-align: center; padding: 20px;">
+    <div style="font-size: 48px; margin-bottom: 16px;">📲</div>
+    <h3 style="color: var(--green); margin-bottom: 8px;">Check your phone & inbox!</h3>
+    <p style="color: var(--text-muted); margin-bottom:16px;">
+        We just sent you a demo quote. Next step: Book a 10-minute walkthrough.
+    </p>
+    <a href="https://calendly.com/" target="_blank" class="btn btn-navy" style="width:100%;">
+        Book 10-min walkthrough
+    </a>
+</div>
 
                     <div id="sms-success" style="display: none; text-align: center; padding: 20px;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📲</div>
