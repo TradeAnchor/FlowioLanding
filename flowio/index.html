@@ -139,7 +139,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 80px;
+            gap: 8px;
         }
         .pulsing-dot {
             width: 8px; height: 8px;
@@ -228,6 +228,39 @@
   overflow: hidden;
   border-radius: 8px;
   background: black;
+}
+/* Poster overlay */
+.video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: #000; }
+
+.video-poster{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  border:0; padding:0; margin:0;
+  background:#000; cursor:pointer;
+}
+
+.video-poster img{
+  width:100%; height:100%;
+  object-fit: cover; display:block;
+}
+
+/* Simple play button */
+.video-playbtn{
+  position:absolute; left:50%; top:50%;
+  width:68px; height:68px;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  background: rgba(249,115,22,0.95);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+.video-playbtn::before{
+  content:"";
+  position:absolute; left:50%; top:50%;
+  transform: translate(-42%,-50%);
+  width:0; height:0;
+  border-left:18px solid #fff;
+  border-top:12px solid transparent;
+  border-bottom:12px solid transparent;
 }
 
 .video-wrapper iframe { position:absolute; inset:0; width:100%; height:100%; }
@@ -815,16 +848,24 @@
             
             <div class="video-column">
                 <div class="video-frame">
-                    <div class="video-wrapper">
-                             <iframe
-                              id="hero-video"
-                              src="https://www.youtube-nocookie.com/embed/Z2NO3qIiP5c?rel=0&modestbranding=1"
-                              frameborder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                              allowfullscreen
-                              style="position:absolute; inset:0; width:100%; height:100%; border:0; display:block;"
-                            ></iframe>
+                    <div class="video-wrapper" id="hero-video-wrap">
+                      <!-- Custom poster (no YouTube UI distractions) -->
+                      <button type="button" class="video-poster" id="hero-video-poster" aria-label="Play demo video">
+                        <img src="https://i.ytimg.com/vi/Z2NO3qIiP5c/maxresdefault.jpg" alt="Flowio Demo" loading="lazy">
+                        <span class="video-playbtn" aria-hidden="true"></span>
+                      </button>
+                    
+                      <!-- Iframe loads only after click -->
+                      <iframe
+                        id="hero-video"
+                        title="Flowio Demo"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                        style="position:absolute; inset:0; width:100%; height:100%; border:0; display:none;"
+                      ></iframe>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -1411,17 +1452,32 @@
 
     <!-- JS (Kept functionality identical) -->
     <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                var iframe = document.getElementById('hero-video');
-                if (iframe) {
-                    var src = iframe.src;
-                    if (src.indexOf('autoplay') === -1) src += "&autoplay=0";
-                    if (src.indexOf('mute') === -1) src += "&mute=1";
-                    iframe.src = src;
-                }
-            }, 2000);
-        });
+            (() => {
+              const poster = document.getElementById('hero-video-poster');
+              const iframe = document.getElementById('hero-video');
+              if (!poster || !iframe) return;
+            
+              const videoId = 'Z2NO3qIiP5c';
+            
+              function loadAndPlayWithSound() {
+                const params = new URLSearchParams({
+                  autoplay: '1',
+                  mute: '0',                // KEY: sound ON (allowed because user clicked)
+                  rel: '0',
+                  modestbranding: '1',
+                  playsinline: '1',
+                  iv_load_policy: '3',
+                  enablejsapi: '1',
+                  controls: '1'
+                });
+            
+                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+                iframe.style.display = 'block';
+                poster.style.display = 'none';
+              }
+            
+              poster.addEventListener('click', loadAndPlayWithSound);
+            })();
 
         const jobData = {
             'power-point': { sku: 'ELEC-002', name: 'Power point add', qty: 1, rate: 150 },
